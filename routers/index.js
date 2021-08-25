@@ -1,0 +1,16 @@
+module.exports = {
+  logRouter: require('./routers/logRouter'),
+  weaponRouter: require('./routers/weaponRouter'),
+  wearableRouter: require('./routers/wearableRouter'),
+  consumableRouter: require('./routers/consumableRouter'),
+  usableRouter: require('./routers/usableRouter'),
+  environmentRouter: require('./routers/environmentRouter'),
+  creatureRouter: require('./routers/creatureRouter'),
+  npcRouter: require('./routers/npcRouter'),
+  sessionRouter: require('./routers/sessionRouter'),
+  noteRouter: require('./routers/noteRouter'),
+  inviteRouter: require('./routers/inviteRouter'),
+  augmentationRouter: require('./routers/augmentationRouter'),
+  charSheetRouter: require('./routers/charSheetRouter'),
+  campSheetRouter: require('./routers/campSheetRouter'),
+};
