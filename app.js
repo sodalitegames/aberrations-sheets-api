@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 
-const router = require('./routes/routes');
+const routers = require('./routers');
 
 const AppError = require('./utils/errorClass');
 const globalErrorHandler = require('./utils/errorHandler');
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 });
 
 // MOUNT ROUTERS
-app.use('/v1', router);
+app.use('/v1/log', routers.logRouter);
 
 // CATCH ALL ROUTE FOR 404 ROUTES
 app.all('*', (req, res, next) => {
