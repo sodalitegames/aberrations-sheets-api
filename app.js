@@ -6,7 +6,18 @@ const router = require('./routes/routes');
 const AppError = require('./utils/errorClass');
 const globalErrorHandler = require('./utils/errorHandler');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+
 const app = express();
+
+app.use(
+  '/',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    customCss: '.swagger-ui .topbar { display: none }',
+  })
+);
 
 // MIDDLEWARE
 if (process.env.NODE_ENV === 'development') {
