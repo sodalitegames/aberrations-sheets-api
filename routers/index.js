@@ -13,4 +13,5 @@ module.exports = {
   augmentationRouter: require('./routers/augmentationRouter'),
   charSheetRouter: require('./routers/charSheetRouter'),
   campSheetRouter: require('./routers/campSheetRouter'),
+  playerRouter: require('./routers/playerRouter'),
 };
