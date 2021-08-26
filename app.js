@@ -13,7 +13,7 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 const app = express();
 
 app.use(
-  '/',
+  '/docs',
   swaggerUi.serve,
   swaggerUi.setup(swaggerDocument, {
     customCss: '.swagger-ui .topbar { display: none }',
@@ -21,7 +21,8 @@ app.use(
 );
 
 // MIDDLEWARE
-if (process.env.NODE_ENV === 'development') {
+// TODO: FIGURE OUT WHY NODE_ENV DOESN'T SEEM TO BE GETTING SET
+if (process.env.NODE_ENV === 'development' || true) {
   app.use(morgan('dev'));
 }
 
@@ -39,8 +40,13 @@ app.use((req, res, next) => {
 });
 
 // MOUNT ROUTERS
-app.use('/v1/character', routers.charSheetRouter);
-app.use('/v1/log', routers.logRouter);
+app.use('/v1/players', routers.playerRouter);
+
+// TODO: POTENTIALLY COMBINE THE FOLLOWING TWO ROUTES INTO ONE WITH A ':SHEETTYPE' PARAM
+app.use('/v1/characters', routers.charSheetRouter);
+app.use('/v1/campaigns', routers.campSheetRouter);
+
+app.use('/v1/:sheetType/:sheetId/log', routers.logRouter);
 
 // CATCH ALL ROUTE FOR 404 ROUTES
 app.all('*', (req, res, next) => {

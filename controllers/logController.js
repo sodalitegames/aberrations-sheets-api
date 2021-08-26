@@ -1,15 +1,14 @@
 const Log = require('../models/logModel');
-
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/errorClass');
 
-exports.getLogsBySheetId = catchAsync(async (req, res, next) => {
+exports.getLogsForSheet = catchAsync(async (req, res, next) => {
   let logs;
 
-  if (req.params.sheetType.toLowerCase() === 'character') {
+  if (req.params.sheetType.toLowerCase() === 'characters') {
     // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
     logs = await Log.find({ charSheetId: req.params.sheetId });
-  } else if (req.params.sheetType.toLowerCase() === 'campaign') {
+  } else if (req.params.sheetType.toLowerCase() === 'campaigns') {
     // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
     logs = await Log.find({ campSheetId: req.params.sheetId });
   } else {
@@ -26,10 +25,10 @@ exports.getLogsBySheetId = catchAsync(async (req, res, next) => {
 });
 
 exports.createLogForSheet = catchAsync(async (req, res, next) => {
-  if (req.params.sheetType.toLowerCase() === 'character') {
+  if (req.params.sheetType.toLowerCase() === 'characters') {
     // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
     req.body.charSheetId = req.params.sheetId;
-  } else if (req.params.sheetType.toLowerCase() === 'campaign') {
+  } else if (req.params.sheetType.toLowerCase() === 'campaigns') {
     // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
     req.body.campSheetId = req.params.sheetId;
   } else {
@@ -47,10 +46,10 @@ exports.createLogForSheet = catchAsync(async (req, res, next) => {
 });
 
 exports.updateLog = catchAsync(async (req, res, next) => {
-  const log = await Log.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+  const log = await Log.findByIdAndUpdate(req.params.logId, req.body, { new: true, runValidators: true });
 
   if (!log) {
-    return next(new AppError(`No log found with id ${req.params.id}`, 404));
+    return next(new AppError(`No log found with id ${req.params.logId}`, 404));
   }
 
   res.status(200).json({
@@ -62,10 +61,10 @@ exports.updateLog = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteLog = catchAsync(async (req, res, next) => {
-  const log = await Log.findByIdAndDelete(req.params.id);
+  const log = await Log.findByIdAndDelete(req.params.logId);
 
   if (!log) {
-    return next(new AppError(`No log found with id ${req.params.id}`, 404));
+    return next(new AppError(`No log found with id ${req.params.logId}`, 404));
   }
 
   req.status(204).json({

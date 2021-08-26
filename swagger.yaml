@@ -5,7 +5,139 @@ info:
 host: api.sheets.aberrations-rpg.com
 basePath: /v1
 paths:
-  /log/:sheetType/:sheetId:
+  /players:
+    post:
+      summary: Create a player
+      tags:
+        - Player
+  /players/:playerId:
+    get:
+      summary: Get a player.
+      tags:
+        - Player
+      parameters:
+        - in: path
+          name: playerId
+          required: true
+          type: string
+          description: Which player to fetch.
+    delete:
+      summary: Delete a player.
+      tags:
+        - Player
+  /players/:playerId/characters:
+    get:
+      summary: List all of a players character sheets.
+      tags:
+        - Player
+        - Character Sheet
+      parameters:
+        - in: path
+          name: playerId
+          required: true
+          type: string
+          description: Which player to get the character sheets of.
+    post:
+      summary: Create a character sheet for a player.
+      tags:
+        - Player
+        - Character Sheet
+      consumes: application/json
+      parameters:
+        - in: path
+          name: playerId
+          required: true
+          type: string
+          description: Which player to create the character sheet for.
+        - in: body
+          name: charSheet
+          description: The character sheet to create
+          schema:
+            $ref: '#/components/schemas/CharSheet'
+  /players/:playerId/campaigns:
+    get:
+      summary: List all of a players campaign sheets.
+      tags:
+        - Player
+        - Campaign Sheet
+      parameters:
+        - in: path
+          name: playerId
+          required: true
+          type: string
+          description: Which player to get the campaign sheets of.
+    post:
+      summary: Create a campaign sheet for a player.
+      tags:
+        - Player
+        - Campaign Sheet
+      consumes: application/json
+      parameters:
+        - in: path
+          name: playerId
+          required: true
+          type: string
+          description: Which player to create the campaign sheet for.
+        - in: body
+          name: campSheet
+          description: The campaign sheet to create
+          schema:
+            $ref: '#/components/schemas/CampSheet'
+  /characters/:sheetId:
+    patch:
+      summary: Update a character sheet.
+      tags:
+        - Character Sheet
+      consumes: application/json
+      parameters:
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which character sheet to update.
+        - in: body
+          name: properties
+          description: The properties of the character sheet to update
+          schema:
+            $ref: '#/components/schemas/CharSheet'
+    delete:
+      summary: Delete a character sheet.
+      tags:
+        - Character Sheet
+      parameters:
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which character sheet to delete.
+  /campaigns/:sheetId:
+    patch:
+      summary: Update a campaign sheet.
+      tags:
+        - Campaign Sheet
+      consumes: application/json
+      parameters:
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which campaign sheet to update.
+        - in: body
+          name: properties
+          description: The properties of the campaign sheet to update
+          schema:
+            $ref: '#/components/schemas/CampSheet'
+    delete:
+      summary: Delete a campaign sheet.
+      tags:
+        - Campaign Sheet
+      parameters:
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which campaign sheet to delete.
+  /:sheetType/:sheetId/log:
     get:
       summary: List all logs of a character or campaign sheet.
       tags:
@@ -37,7 +169,7 @@ paths:
           description: The log to create
           schema:
             $ref: '#/components/schemas/Log'
-  /log/:id:
+  /:sheetType/:sheetId/log/:logId:
     patch:
       summary: Update a log.
       tags:
@@ -45,7 +177,7 @@ paths:
       consumes: application/json
       parameters:
         - in: path
-          name: id
+          name: logId
           required: true
           type: string
           description: Which log to update.
@@ -60,13 +192,44 @@ paths:
         - Log
       parameters:
         - in: path
-          name: id
+          name: logId
           required: true
           type: string
           description: Which log to delete.
 
 components:
   schemas:
+    CharSheet:
+      type: object
+      required:
+        - playerName
+        - characterName
+        - charBackground
+        - charDescription
+      properties:
+        playerName:
+          type: string
+        characterName:
+          type: string
+        charBackground:
+          type: string
+        charDescription:
+          type: string
+        lifeKredits:
+          type: number
+    CampSheet:
+      type: object
+      required:
+        - name
+        - overview
+        - details
+      properties:
+        name:
+          type: string
+        overview:
+          type: string
+        details:
+          type: string
     Log:
       type: object
       required:
@@ -81,5 +244,5 @@ components:
     sheetType:
       type: string
       enum:
-        - character
-        - campaign
+        - characters
+        - campaigns
