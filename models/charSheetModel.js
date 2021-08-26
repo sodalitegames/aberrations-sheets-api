@@ -28,6 +28,6 @@ const charSheetSchema = new mongoose.Schema({
   lifeKredits: Number,
 });
 
-const CharSheet = mongoose.model('CharSheet', charSheetSchema);
+const CharSheet = mongoose.model('Characters', charSheetSchema);
 
 module.exports = CharSheet;

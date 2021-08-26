@@ -19,6 +19,6 @@ const campSheetSchema = new mongoose.Schema({
   },
 });
 
-const CampSheet = mongoose.model('CampSheet', campSheetSchema);
+const CampSheet = mongoose.model('Campaigns', campSheetSchema);
 
 module.exports = CampSheet;
