@@ -7,7 +7,8 @@ const AppError = require('./utils/errorClass');
 const globalErrorHandler = require('./utils/errorHandler');
 
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use((req, res, next) => {
 });
 
 // MOUNT ROUTERS
+app.use('/v1/character', routers.charSheetRouter);
 app.use('/v1/log', routers.logRouter);
 
 // CATCH ALL ROUTE FOR 404 ROUTES

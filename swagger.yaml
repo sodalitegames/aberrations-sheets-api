@@ -1,0 +1,91 @@
+swagger: '2.0'
+info:
+  title: Aberrations Sheets API
+  description: API for Aberrations Sheets application.
+host: api.sheets.aberrations-rpg.com
+basePath: /v1
+paths:
+  /log/:charid:
+    get:
+      summary: List all logs of a character sheet.
+      tags:
+        - Log
+      parameters:
+        - in: path
+          name: charid
+          required: true
+          type: string
+          description: Which character sheet to get the logs of.
+    post:
+      summary: Create a log for a character sheet.
+      tags:
+        - Log
+      consumes: application/json
+      parameters:
+        - in: body
+          name: log
+          description: The log to create
+          schema:
+            $ref: '#/definitions/Log'
+  /log/:campid:
+    get:
+      summary: List all logs of a campaign sheet.
+      tags:
+        - Log
+      parameters:
+        - in: path
+          name: campid
+          required: true
+          type: string
+          description: Which campaign sheet to get the logs of.
+    post:
+      summary: Create a log for a campaign sheet.
+      tags:
+        - Log
+      consumes: application/json
+      parameters:
+        - in: body
+          name: log
+          description: The log to create
+          schema:
+            $ref: '#/definitions/Log'
+  /log/:id:
+    patch:
+      summary: Update a log.
+      tags:
+        - Log
+      consumes: application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+          description: Which log to update.
+        - in: body
+          name: properties
+          description: The properties of the log to update
+          schema:
+            $ref: '#/definitions/Log'
+    delete:
+      summary: Delete a log.
+      tags:
+        - Log
+      parameters:
+        - in: path
+          name: id
+          required: true
+          type: string
+          description: Which log to delete.
+
+definitions:
+  Log:
+    type: object
+    required:
+      - date
+      - content
+    properties:
+      date:
+        type: string
+        format: date
+      content:
+        type: string
