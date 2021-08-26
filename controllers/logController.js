@@ -1,4 +1,5 @@
 const Log = require('../models/logModel');
+
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/errorClass');
 
@@ -67,7 +68,7 @@ exports.deleteLog = catchAsync(async (req, res, next) => {
     return next(new AppError(`No log found with id ${req.params.logId}`, 404));
   }
 
-  req.status(204).json({
+  res.status(204).json({
     status: 'success',
     data: null,
   });
