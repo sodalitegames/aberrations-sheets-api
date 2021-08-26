@@ -1,21 +1,18 @@
 const Log = require('../models/logModel');
 
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/errorClass');
 
-exports.getLogsByCharSheetId = catchAsync(async (req, res, next) => {
-  const logs = await Log.find({ charSheetId: req.params.charid });
+exports.getLogsBySheetId = catchAsync(async (req, res, next) => {
+  let logs;
 
-  res.status(200).json({
-    status: 'success',
-    results: logs.length,
-    data: {
-      logs,
-    },
-  });
-});
-
-exports.getLogsByCampSheetId = catchAsync(async (req, res, next) => {
-  const logs = await Log.find({ campSheetId: req.params.campid });
+  if (req.params.sheetType.toLowerCase() === 'character') {
+    logs = await Log.find({ charSheetId: req.params.sheetId });
+  } else if (req.params.sheetType.toLowerCase() === 'campaign') {
+    logs = await Log.find({ campSheetId: req.params.sheetId });
+  } else {
+    return next(new AppError(`Param 'sheetType' must be either 'character' or 'campaign'`, 400));
+  }
 
   res.status(200).json({
     status: 'success',
@@ -26,23 +23,14 @@ exports.getLogsByCampSheetId = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createLogForCharSheet = catchAsync(async (req, res, next) => {
-  req.body.charSheetId = req.params.charid;
-  req.body.campSheetId = null;
-
-  const newLog = await Log.create(req.body);
-
-  res.status(201).json({
-    status: 'success',
-    data: {
-      log: newLog,
-    },
-  });
-});
-
-exports.createLogForCampSheet = catchAsync(async (req, res, next) => {
-  req.body.campSheetId = req.params.campid;
-  req.body.charSheetId = null;
+exports.createLogForSheet = catchAsync(async (req, res, next) => {
+  if (req.params.sheetType.toLowerCase() === 'character') {
+    req.body.charSheetId = req.params.sheetId;
+  } else if (req.params.sheetType.toLowerCase() === 'campaign') {
+    req.body.campSheetId = req.params.sheetId;
+  } else {
+    return next(new AppError(`Param 'sheetType' must be either 'character' or 'campaign'`, 400));
+  }
 
   const newLog = await Log.create(req.body);
 

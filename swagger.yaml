@@ -1,54 +1,42 @@
-swagger: '2.0'
+openapi: '3.0.0'
 info:
   title: Aberrations Sheets API
   description: API for Aberrations Sheets application.
 host: api.sheets.aberrations-rpg.com
 basePath: /v1
 paths:
-  /log/:charid:
+  /log/:sheetType/:sheetId:
     get:
-      summary: List all logs of a character sheet.
+      summary: List all logs of a character or campaign sheet.
       tags:
         - Log
       parameters:
         - in: path
-          name: charid
+          name: sheetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/sheetType'
+        - in: path
+          name: sheetId
           required: true
           type: string
-          description: Which character sheet to get the logs of.
+          description: Which sheet to get the logs of.
     post:
       summary: Create a log for a character sheet.
       tags:
         - Log
       consumes: application/json
       parameters:
-        - in: body
-          name: log
-          description: The log to create
-          schema:
-            $ref: '#/definitions/Log'
-  /log/:campid:
-    get:
-      summary: List all logs of a campaign sheet.
-      tags:
-        - Log
-      parameters:
         - in: path
-          name: campid
+          name: sheet
           required: true
-          type: string
-          description: Which campaign sheet to get the logs of.
-    post:
-      summary: Create a log for a campaign sheet.
-      tags:
-        - Log
-      consumes: application/json
-      parameters:
+          schema:
+            $ref: '#/components/schemas/sheetType'
         - in: body
           name: log
           description: The log to create
           schema:
-            $ref: '#/definitions/Log'
+            $ref: '#/components/schemas/Log'
   /log/:id:
     patch:
       summary: Update a log.
@@ -65,7 +53,7 @@ paths:
           name: properties
           description: The properties of the log to update
           schema:
-            $ref: '#/definitions/Log'
+            $ref: '#/components/schemas/Log'
     delete:
       summary: Delete a log.
       tags:
@@ -77,15 +65,21 @@ paths:
           type: string
           description: Which log to delete.
 
-definitions:
-  Log:
-    type: object
-    required:
-      - date
-      - content
-    properties:
-      date:
-        type: string
-        format: date
-      content:
-        type: string
+components:
+  schemas:
+    Log:
+      type: object
+      required:
+        - date
+        - content
+      properties:
+        date:
+          type: string
+          format: date
+        content:
+          type: string
+    sheetType:
+      type: string
+      enum:
+        - character
+        - campaign
