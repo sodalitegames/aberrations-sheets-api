@@ -7,8 +7,10 @@ exports.getLogsBySheetId = catchAsync(async (req, res, next) => {
   let logs;
 
   if (req.params.sheetType.toLowerCase() === 'character') {
+    // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
     logs = await Log.find({ charSheetId: req.params.sheetId });
   } else if (req.params.sheetType.toLowerCase() === 'campaign') {
+    // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
     logs = await Log.find({ campSheetId: req.params.sheetId });
   } else {
     return next(new AppError(`Param 'sheetType' must be either 'character' or 'campaign'`, 400));
@@ -25,8 +27,10 @@ exports.getLogsBySheetId = catchAsync(async (req, res, next) => {
 
 exports.createLogForSheet = catchAsync(async (req, res, next) => {
   if (req.params.sheetType.toLowerCase() === 'character') {
+    // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
     req.body.charSheetId = req.params.sheetId;
   } else if (req.params.sheetType.toLowerCase() === 'campaign') {
+    // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
     req.body.campSheetId = req.params.sheetId;
   } else {
     return next(new AppError(`Param 'sheetType' must be either 'character' or 'campaign'`, 400));
