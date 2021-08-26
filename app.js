@@ -1,7 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 
-const routers = require('./routers');
+const playerRouter = require('./routers/playerRouter');
+const sheetRouter = require('./routers/sheetRouter');
 
 const AppError = require('./utils/errorClass');
 const globalErrorHandler = require('./utils/errorHandler');
@@ -12,6 +13,7 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 
 const app = express();
 
+// TODO: CREATE REUSABLE GROUPS OF PARAMS FOR THE YAML FILE
 app.use(
   '/docs',
   swaggerUi.serve,
@@ -31,8 +33,9 @@ app.use(express.static(`${__dirname}/public`));
 
 // app.use((req, res, next) => {
 //   // run code...
+//   console.log(req.params);
 //   next();
-// })
+// });
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -40,13 +43,10 @@ app.use((req, res, next) => {
 });
 
 // MOUNT ROUTERS
-app.use('/v1/players', routers.playerRouter);
-
-// TODO: POTENTIALLY COMBINE THE FOLLOWING TWO ROUTES INTO ONE WITH A ':SHEETTYPE' PARAM
-app.use('/v1/characters', routers.charSheetRouter);
-app.use('/v1/campaigns', routers.campSheetRouter);
-
-app.use('/v1/:sheetType/:sheetId/log', routers.logRouter);
+app.use('/v1/players', playerRouter);
+// TODO: CREATE A MIDDLEWARE THAT CHECKS THE SHEETTYPE
+// so i dont have to keep repeating myself all over
+app.use('/v1/:sheetType', sheetRouter);
 
 // CATCH ALL ROUTE FOR 404 ROUTES
 app.all('*', (req, res, next) => {
