@@ -4,17 +4,7 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/errorClass');
 
 exports.getLogsForSheet = catchAsync(async (req, res, next) => {
-  let logs;
-
-  if (req.params.sheetType.toLowerCase() === 'characters') {
-    // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
-    logs = await Log.find({ charSheetId: req.params.sheetId });
-  } else if (req.params.sheetType.toLowerCase() === 'campaigns') {
-    // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
-    logs = await Log.find({ campSheetId: req.params.sheetId });
-  } else {
-    return next(new AppError(`Param 'sheetType' must be either 'character' or 'campaign'`, 400));
-  }
+  const logs = await Log.find({ sheetId: req.params.sheetId });
 
   res.status(200).json({
     status: 'success',
@@ -26,15 +16,7 @@ exports.getLogsForSheet = catchAsync(async (req, res, next) => {
 });
 
 exports.createLogForSheet = catchAsync(async (req, res, next) => {
-  if (req.params.sheetType.toLowerCase() === 'characters') {
-    // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
-    req.body.charSheetId = req.params.sheetId;
-  } else if (req.params.sheetType.toLowerCase() === 'campaigns') {
-    // TODO: MAKE A CHECK TO MAKE SURE SHEET ID ACTUALLY EXISTS
-    req.body.campSheetId = req.params.sheetId;
-  } else {
-    return next(new AppError(`Param 'sheetType' must be either 'character' or 'campaign'`, 400));
-  }
+  req.body.sheetId = req.params.sheetId;
 
   const newLog = await Log.create(req.body);
 

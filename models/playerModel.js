@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
 const playerSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: [true, 'A player must have an email address'],
+  _id: {
+    type: mongoose.ObjectId,
+    required: [true, 'Must provide ObjectId.'],
   },
+  createdAt: Date,
 });
 
 const Player = mongoose.model('Player', playerSchema);

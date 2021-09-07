@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
 const logSchema = new mongoose.Schema({
-  charSheetId: mongoose.ObjectId || null,
-  campSheetId: mongoose.ObjectId || null,
+  sheetId: mongoose.ObjectId || null,
   date: {
     type: Date,
     required: [true, 'A log must have a date'],
