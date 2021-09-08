@@ -11,7 +11,10 @@ const sheetRouter = express.Router({ mergeParams: true });
 // .checkSheetExists
 // .requireAuthorization (must go after checkSheetExists)
 
-sheetRouter.route('/:sheetId').patch(authController.requireAuthorization, sheetController.updateSheet).delete(authController.requireAuthorization, sheetController.deleteSheet);
+sheetRouter
+  .route('/:sheetId')
+  .patch(sheetController.checkSheetExists, authController.requireAuthorization, sheetController.updateSheet)
+  .delete(sheetController.checkSheetExists, authController.requireAuthorization, sheetController.deleteSheet);
 
 sheetRouter.use('/:sheetId/log', sheetController.checkSheetExists, authController.requireAuthorization, routers.logRouter);
 

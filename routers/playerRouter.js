@@ -1,11 +1,10 @@
 const express = require('express');
 
 const playerController = require('../controllers/playerController');
+const sheetController = require('../controllers/sheetController');
 
 const router = express.Router();
 
-router.route('/').post(playerController.createPlayer);
-router.route('/:playerId').get(playerController.getPlayer).patch(playerController.updatePlayer).delete(playerController.deletePlayer);
-router.route('/:playerId/:sheetType').get(playerController.getSheetsForPlayer).post(playerController.createSheetForPlayer);
+router.route('/:sheetType').get(sheetController.checkSheetType, playerController.getSheetsForPlayer).post(sheetController.checkSheetType, playerController.createSheetForPlayer);
 
 module.exports = router;

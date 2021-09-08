@@ -21,7 +21,7 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 
 const app = express();
 
-// TODO: CREATE REUSABLE GROUPS OF PARAMS FOR THE YAML FILE
+// Use swagger for api documentation
 app.use(
   '/docs',
   swaggerUi.serve,
@@ -29,8 +29,6 @@ app.use(
     customCss: '.swagger-ui .topbar { display: none }',
   })
 );
-
-// MIDDLEWARE
 
 // Set security HTTP headers
 app.use(helmet());
@@ -65,13 +63,9 @@ app.use(
   })
 );
 
-// Serve static files
-// app.use(express.static(`${__dirname}/public`));
-
 // Test middleware
 // app.use((req, res, next) => {
 //   // run code...
-//   console.log(req.params);
 //   next();
 // });
 
@@ -82,9 +76,7 @@ app.use((req, res, next) => {
 });
 
 // MOUNT ROUTERS
-app.use('/v1/players', playerRouter);
-// TODO: CREATE A MIDDLEWARE THAT CHECKS THE SHEETTYPE
-// so i dont have to keep repeating myself all over
+app.use('/v1/players', authController.requireAuthentication, playerRouter);
 app.use('/v1/:sheetType', authController.requireAuthentication, sheetController.checkSheetType, sheetRouter);
 
 // CATCH ALL ROUTE FOR 404 ROUTES
