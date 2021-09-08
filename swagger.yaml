@@ -1,3 +1,4 @@
+# TODO: CREATE REUSABLE GROUPS OF PARAMS FOR THIS FILE
 openapi: '3.0.0'
 info:
   title: Aberrations Sheets API
@@ -5,54 +6,7 @@ info:
 host: api.sheets.aberrations-rpg.com
 basePath: /v1
 paths:
-  /players:
-    post:
-      summary: Create a player.
-      tags:
-        - Player
-      parameters:
-        - in: body
-          name: player
-          description: The player to create.
-          schema:
-            $ref: '#/components/schemas/Player'
-  /players/:playerId:
-    get:
-      summary: Get a player.
-      tags:
-        - Player
-      parameters:
-        - in: path
-          name: playerId
-          required: true
-          type: string
-          description: Which player to fetch.
-    patch:
-      summary: Update a player.
-      tags:
-        - Player
-      parameters:
-        - in: path
-          name: playerId
-          required: true
-          type: string
-          description: Which player to update.
-        - in: body
-          name: properties
-          description: The properties of the player to update.
-          schema:
-            $ref: '#/components/schemas/Player'
-    delete:
-      summary: Delete a player.
-      tags:
-        - Player
-      parameters:
-        - in: path
-          name: playerId
-          required: true
-          type: string
-          description: Which player to delete.
-  /players/:playerId/:sheetType:
+  /players/:sheetType:
     get:
       summary: List all of a players character or campaign sheets.
       tags:
@@ -60,11 +14,6 @@ paths:
         - Character Sheet
         - Campaign Sheet
       parameters:
-        - in: path
-          name: playerId
-          required: true
-          type: string
-          description: Which player to get the character or campaign sheets of.
         - in: path
           name: sheetType
           required: true
@@ -78,11 +27,6 @@ paths:
         - Campaign Sheet
       consumes: application/json
       parameters:
-        - in: path
-          name: playerId
-          required: true
-          type: string
-          description: Which player to create the character or campaign sheet for.
         - in: path
           name: sheetType
           required: true
@@ -222,14 +166,11 @@ paths:
           description: Which log to delete.
 
 components:
+  securitySchemes:
+    bearerToken:
+      type: http
+      scheme: bearer
   schemas:
-    Player:
-      type: object
-      required:
-        - email
-      properties:
-        email:
-          type: string
     CharSheet:
       type: object
       required:
@@ -277,3 +218,7 @@ components:
       enum:
         - characters
         - campaigns
+
+# Apply the security globally to all operations
+security:
+  - bearerToken: []
