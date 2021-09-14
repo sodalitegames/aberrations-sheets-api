@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -5,6 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cors = require('cors');
 
 const playerRouter = require('./routers/playerRouter');
 const sheetRouter = require('./routers/sheetRouter');
@@ -21,6 +23,9 @@ const swaggerDocument = YAML.load('./swagger.yaml');
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 // Use swagger for api documentation
 app.use(
   '/docs',
@@ -30,8 +35,24 @@ app.use(
   })
 );
 
+// Implement CORs
+app.use(cors());
+app.options('*', cors());
+
 // Set security HTTP headers
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'", 'https:', 'http:', 'data:', 'ws:'],
+        baseUri: ["'self'"],
+        fontSrc: ["'self'", 'https:', 'http:', 'data:'],
+        scriptSrc: ["'self'", 'https:', 'http:', 'blob:'],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https:', 'http:'],
+      },
+    },
+  })
+);
 
 // Development logging
 if (process.env.NODE_ENV !== 'production') {
@@ -63,6 +84,9 @@ app.use(
   })
 );
 
+// Serving static files
+// app.use(express.static(path.join(__dirname, 'public')));
+
 // Test middleware
 // app.use((req, res, next) => {
 //   // run code...
@@ -78,6 +102,12 @@ app.use((req, res, next) => {
 // MOUNT ROUTERS
 app.use('/v1/players', authController.requireAuthentication, playerRouter);
 app.use('/v1/:sheetType', authController.requireAuthentication, sheetController.checkSheetType, sheetRouter);
+
+app.use('/', (req, res) => {
+  res.status(200).render('root', {
+    mode: process.env.NODE_ENV,
+  });
+});
 
 // CATCH ALL ROUTE FOR 404 ROUTES
 app.all('*', (req, res, next) => {
