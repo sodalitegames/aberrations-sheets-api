@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const noteSchema = new mongoose.Schema({
-  sheetId: mongoose.ObjectId || null,
+  sheetId: {
+    type: mongoose.ObjectId,
+    required: [true, 'A note must have an associated sheetId'],
+  },
   content: {
     type: String,
     required: [true, 'A note must have content'],

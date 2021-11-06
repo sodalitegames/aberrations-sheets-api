@@ -57,7 +57,7 @@ exports.getOne = (Model, populateOptions) =>
     const docId = getId(req.params);
 
     // Find document
-    let query = Model.findById(req.params.id);
+    let query = Model.findById(docId);
 
     // Populate document, if populate options were provided
     if (populateOptions) query = query.populate(populateOptions);

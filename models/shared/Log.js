@@ -1,7 +1,10 @@
 const mongoose = require('mongoose');
 
 const logSchema = new mongoose.Schema({
-  sheetId: mongoose.ObjectId || null,
+  sheetId: {
+    type: mongoose.ObjectId,
+    required: [true, 'A log must have an associated sheetId'],
+  },
   date: {
     type: Date,
     required: [true, 'A log must have a date'],

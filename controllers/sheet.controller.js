@@ -103,6 +103,19 @@ exports.getSheet = catchAsync(async (req, res, next) => {
     ];
   }
 
+  // Shared fields
+  pipelineArr = [
+    ...pipelineArr,
+    {
+      $lookup: {
+        from: 'notes',
+        localField: '_id',
+        foreignField: 'sheetId',
+        as: 'notes',
+      },
+    },
+  ];
+
   const sheet = await req.SheetModel.aggregate([
     {
       $match: { _id: ObjectId(req.sheet.id) },
