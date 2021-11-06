@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const Player = require('../models/playerModel');
 
 const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/errorClass');
+const AppError = require('../utils/appError');
 
 exports.requireAuthentication = catchAsync(async (req, res, next) => {
   let token;
@@ -31,28 +31,3 @@ exports.requireAuthentication = catchAsync(async (req, res, next) => {
   req.player = currentPlayer;
   next();
 });
-
-exports.requireAuthorization = (req, res, next) => {
-  console.log(req.player);
-  console.log(req.sheet);
-
-  if (!req.player || !req.sheet) {
-    return next(new AppError('Cannot authorize. Player and/or Sheet are undefined.', 400));
-  }
-
-  if (!req.player.id === req.sheet.playerId && !req.player.id === req.sheet.ccId) {
-    return next(new AppError('You are not authorized to request this route.', 401));
-  }
-
-  next();
-};
-
-exports.restrictTo =
-  (...sheetTypes) =>
-  (req, res, next) => {
-    // roles is an array
-    if (!sheetTypes.includes(req.params.sheetType)) {
-      return next(new AppError('This route does not exist.', 404));
-    }
-    next();
-  };

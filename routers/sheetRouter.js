@@ -7,15 +7,22 @@ const routers = require('./routers');
 
 const sheetRouter = express.Router({ mergeParams: true });
 
-// .restrictTo('characters', 'campaigns')
+// user must be authenticated
+sheetRouter.use(authController.requireAuthentication);
+
+// sheetType must be valid
+sheetRouter.use(sheetController.checkSheetType);
+
 // .checkSheetExists
 // .requireAuthorization (must go after checkSheetExists)
 
-sheetRouter
-  .route('/:sheetId')
-  .patch(sheetController.checkSheetExists, authController.requireAuthorization, sheetController.updateSheet)
-  .delete(sheetController.checkSheetExists, authController.requireAuthorization, sheetController.deleteSheet);
+// check that the sheetId is valid and the sheet exists, and require user authorization to view and edit the sheet
+sheetRouter.use('/:sheetId', sheetController.checkSheetExists, sheetController.requireAuthorization);
 
-sheetRouter.use('/:sheetId/log', sheetController.checkSheetExists, authController.requireAuthorization, routers.logRouter);
+sheetRouter.route('/:sheetId').get(sheetController.getSheet).patch(sheetController.updateSheet).delete(sheetController.deleteSheet);
+
+// MOUNT THE NESTED ROUTERS
+
+sheetRouter.use('/:sheetId/log', sheetController.restrictTo('campaigns', 'characters'), routers.logRouter);
 
 module.exports = sheetRouter;

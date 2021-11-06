@@ -2,13 +2,13 @@ const nodemailer = require('nodemailer');
 const pug = require('pug');
 const htmlToText = require('html-to-text');
 
-// new Email(user, url).sendWelcome();
+// new Email(toEmail, emailData).sendEmail();
+// returns true if sent, false if not sent
 
 module.exports = class Email {
-  constructor(user, url) {
-    this.to = user.email;
-    this.firstName = user.name.split(' ')[0];
-    this.url = url;
+  constructor(toEmail, emailData) {
+    this.to = toEmail;
+    this.data = emailData;
     this.from = `Aberrations RPG <${process.env.EMAIL_FROM}>`;
   }
 
@@ -38,8 +38,7 @@ module.exports = class Email {
     // Send the actual email
     // 1 - Render HTML based on a pug template
     const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
-      firstName: this.firstName,
-      url: this.url,
+      data: this.data,
       subject,
     });
 
@@ -56,11 +55,53 @@ module.exports = class Email {
     await this.newTransport().sendMail(mailOptions);
   }
 
+  async sendNotificationEmail() {
+    try {
+      await this.send('notification', 'Aberrations RPG Notification: A new account has been created');
+      return true;
+    } catch (err) {
+      console.log(err.message);
+      return false;
+    }
+  }
+
   async sendConfirmEmail() {
-    await this.send('confirmEmail', `Please confirm your email address...`);
+    try {
+      await this.send('confirmEmail', 'Please confirm your email address...');
+      return true;
+    } catch (err) {
+      console.log(err.message);
+      return false;
+    }
+  }
+
+  async sendUpdateEmail() {
+    try {
+      await this.send('updateEmail', 'Please confirm your email update request');
+      return true;
+    } catch (err) {
+      console.log(err.message);
+      return false;
+    }
   }
 
   async sendPasswordReset() {
-    await this.send('passwordReset', 'Your password reset token (valid for only 10 minutes)');
+    try {
+      await this.send('passwordReset', 'Your password reset token (valid for only 10 minutes)');
+      return true;
+    } catch (err) {
+      console.log(err.message);
+      return false;
+    }
+  }
+
+  async sendActivateSubscription() {
+    try {
+      await this.send('activateSubscription', 'Almost there! Activate your subscription now');
+      return true;
+    } catch (err) {
+      console.log(err.message);
+      return false;
+    }
   }
 };

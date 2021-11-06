@@ -8,7 +8,7 @@ basePath: /v1
 paths:
   /players/:sheetType:
     get:
-      summary: List all of a players character or campaign sheets.
+      summary: List all of a players character or campaign sheets (unaggregated).
       tags:
         - Player
         - Character Sheet
@@ -34,12 +34,46 @@ paths:
             $ref: '#/components/schemas/sheetType'
         - in: body
           name: sheet
-          description: The character or campaign sheet to create
+          description: The character or campaign sheet to create.
           schema:
             oneOf:
               - $ref: '#/components/schemas/CharSheet'
               - $ref: '#/components/schemas/CampSheet'
+  /players/:sheetType/:sheetId:
+    get:
+      summary: Fetch a single character or campaign sheet of a player (unaggregated)
+      tags:
+        - Player
+        - Character Sheet
+        - Campaign Sheet
+      parameters:
+        - in: path
+          name: sheetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/sheetType'
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which character or campaign sheet to get.
   /:sheetType/:sheetId:
+    get:
+      summary: Fetch a single character or campaign sheet (aggregated)
+      tags:
+        - Character Sheet
+        - Campaign Sheet
+      parameters:
+        - in: path
+          name: sheetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/sheetType'
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which character or campaign sheet to get.
     patch:
       summary: Update a character or campaign sheet.
       tags:

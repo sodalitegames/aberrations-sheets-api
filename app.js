@@ -5,16 +5,13 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
-const hpp = require('hpp');
 const cors = require('cors');
+const hpp = require('hpp');
 
 const playerRouter = require('./routers/playerRouter');
 const sheetRouter = require('./routers/sheetRouter');
 
-const sheetController = require('./controllers/sheetController');
-const authController = require('./controllers/authController');
-
-const AppError = require('./utils/errorClass');
+const AppError = require('./utils/appError');
 const globalErrorHandler = require('./utils/errorHandler');
 
 const swaggerUi = require('swagger-ui-express');
@@ -26,7 +23,7 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
-// Use swagger for api documentation
+// Use swagger for API documentation
 app.use(
   '/docs',
   swaggerUi.serve,
@@ -57,6 +54,8 @@ app.use(
 // Development logging
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'));
+} else {
+  app.use(morgan('combined'));
 }
 
 // limit requests from same API
@@ -85,11 +84,11 @@ app.use(
 );
 
 // Serving static files
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Test middleware
 // app.use((req, res, next) => {
-//   // run code...
+//   console.log('Hello from the middleware function');
 //   next();
 // });
 
@@ -100,8 +99,8 @@ app.use((req, res, next) => {
 });
 
 // MOUNT ROUTERS
-app.use('/v1/players', authController.requireAuthentication, playerRouter);
-app.use('/v1/:sheetType', authController.requireAuthentication, sheetController.checkSheetType, sheetRouter);
+app.use('/v1/players', playerRouter);
+app.use('/v1/:sheetType', sheetRouter);
 
 app.use('/', (req, res) => {
   res.status(200).render('root', {
@@ -109,9 +108,9 @@ app.use('/', (req, res) => {
   });
 });
 
-// CATCH ALL ROUTE FOR 404 ROUTES
+// CATCH ALL ROUTE FOR ANY UNHANDLED ROUTES
 app.all('*', (req, res, next) => {
-  next(new AppError(`${req.originalUrl} does not exist`, 404));
+  next(new AppError(`Cannot find ${req.originalUrl} on this server`, 404));
 });
 
 // ERROR HANDLING MIDDLEWARE

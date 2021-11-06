@@ -1,15 +1,12 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 
-// imports MUST remain - utilized through eval
-const CampSheet = require('../models/campSheetModel');
-const CharSheet = require('../models/charSheetModel');
-
 const catchAsync = require('../utils/catchAsync');
 
 exports.getSheetsForPlayer = catchAsync(async (req, res, next) => {
+  // Get full document using aggregation
   let pipelineArr = [];
 
-  if (req.sheetModelString === 'CharSheet') {
+  if (req.params.sheetType === 'characters') {
     pipelineArr = [
       {
         $lookup: {
@@ -22,7 +19,7 @@ exports.getSheetsForPlayer = catchAsync(async (req, res, next) => {
     ];
   }
 
-  if (req.sheetModelString === 'CampSheet') {
+  if (req.params.sheetType === 'campaigns') {
     pipelineArr = [
       {
         $lookup: {
@@ -35,7 +32,7 @@ exports.getSheetsForPlayer = catchAsync(async (req, res, next) => {
     ];
   }
 
-  const sheets = await eval(req.sheetModelString).aggregate([
+  const sheets = await req.SheetModel.aggregate([
     {
       $match: { playerId: ObjectId(req.player.id) },
     },
@@ -54,10 +51,23 @@ exports.getSheetsForPlayer = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getSingleSheetForPlayer = catchAsync(async (req, res, next) => {
+  // Get document
+  const sheet = await req.SheetModel.findByIdAndUpdate(req.params.sheetId);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      sheet,
+    },
+  });
+});
+
 exports.createSheetForPlayer = catchAsync(async (req, res, next) => {
+  // set the playerId to the current user's Id
   req.body.playerId = req.player.id;
 
-  const newSheet = await eval(req.sheetModelString).create(req.body);
+  const newSheet = await req.SheetModel.create(req.body);
 
   res.status(201).json({
     status: 'success',
