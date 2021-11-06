@@ -1,8 +1,8 @@
 const express = require('express');
 
-const authController = require('../controllers/authController');
-const playerController = require('../controllers/playerController');
-const sheetController = require('../controllers/sheetController');
+const authController = require('../controllers/auth.controller');
+const playerController = require('../controllers/player.controller');
+const sheetController = require('../controllers/sheet.controller');
 
 const router = express.Router();
 

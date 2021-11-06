@@ -1,9 +1,9 @@
 const express = require('express');
 
-const sheetController = require('../controllers/sheetController');
-const authController = require('../controllers/authController');
+const sheetController = require('../controllers/sheet.controller');
+const authController = require('../controllers/auth.controller');
 
-const routers = require('./routers');
+const routers = require('./nested');
 
 const sheetRouter = express.Router({ mergeParams: true });
 
@@ -23,6 +23,7 @@ sheetRouter.route('/:sheetId').get(sheetController.getSheet).patch(sheetControll
 
 // MOUNT THE NESTED ROUTERS
 
-sheetRouter.use('/:sheetId/log', sheetController.restrictTo('campaigns', 'characters'), routers.logRouter);
+sheetRouter.use('/:sheetId/logs', sheetController.restrictTo('characters', 'campaigns'), routers.logRouter);
+sheetRouter.use('/:sheetId/notes', sheetController.restrictTo('characters', 'campaigns'), routers.noteRouter);
 
 module.exports = sheetRouter;

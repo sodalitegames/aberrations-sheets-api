@@ -1,7 +1,7 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 
-const CharSheet = require('../models/charSheetModel');
-const CampSheet = require('../models/campSheetModel');
+const CharSheet = require('../models/CharSheet');
+const CampSheet = require('../models/CampSheet');
 
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
@@ -27,7 +27,6 @@ const filterObj = (obj, ...allowedFields) => {
 exports.restrictTo =
   (...sheetTypes) =>
   (req, res, next) => {
-    // roles is an array
     if (!sheetTypes.includes(req.params.sheetType)) {
       return next(new AppError(`This route does not exist for ${req.params.sheetType} sheets. Did you mean to use ${sheetTypes} sheets?`, 404));
     }
@@ -41,7 +40,7 @@ exports.checkSheetType = (req, res, next) => {
     return next(new AppError(`Param 'sheetType' must be either 'characters' or 'campaigns'`, 400));
   }
 
-  // pass the sheet model along in req obj
+  // Pass the sheet model along in req obj
   req.SheetModel = SheetModels[sheetType];
 
   next();
@@ -54,17 +53,19 @@ exports.checkSheetExists = catchAsync(async (req, res, next) => {
     return next(new AppError(`No sheet found of type '${req.params.sheetType}' with id '${req.params.sheetId}'`, 404));
   }
 
-  // pass sheet along in req obj
+  // Pass sheet along in req obj
   req.sheet = sheet;
 
   next();
 });
 
 exports.requireAuthorization = (req, res, next) => {
+  // req.player comes from authController.requireAuthorization
   if (!req.player || !req.sheet) {
     return next(new AppError('Cannot authorize. Player and/or Sheet are undefined.', 400));
   }
 
+  // req.player comes from authController.requireAuthorization
   if (req.player.id.toString() !== req.sheet.playerId.toString() && req.player.id.toString() !== req.sheet.ccId.toString()) {
     return next(new AppError('You are not authorized to request this route.', 401));
   }
@@ -109,6 +110,11 @@ exports.getSheet = catchAsync(async (req, res, next) => {
     ...pipelineArr,
   ]);
 
+  if (!sheet) {
+    return next(new AppError(`An error occured during aggregation.`, 500));
+  }
+
+  // Send the response
   res.status(200).json({
     status: 'success',
     data: {
@@ -124,6 +130,7 @@ exports.updateSheet = catchAsync(async (req, res, next) => {
   // Update document
   const updatedSheet = await req.SheetModel.findByIdAndUpdate(req.params.sheetId, filteredBody, { new: true, runValidators: true });
 
+  // Send the response
   res.status(200).json({
     status: 'success',
     data: {
@@ -135,6 +142,7 @@ exports.updateSheet = catchAsync(async (req, res, next) => {
 exports.deleteSheet = catchAsync(async (req, res, next) => {
   await req.SheetModel.findByIdAndDelete(req.params.sheetId);
 
+  // Send the response
   res.status(204).json({
     status: 'success',
     data: null,

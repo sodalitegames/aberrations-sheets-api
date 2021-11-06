@@ -1,7 +1,7 @@
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 
-const Player = require('../models/playerModel');
+const Player = require('../models/Player');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -26,8 +26,9 @@ exports.requireAuthentication = catchAsync(async (req, res, next) => {
     return next(new AppError('The player belonging to this token no longer exists.', 401));
   }
 
-  // GRANT ACCESS TO THE PROTECTED ROUTE
-  // add player to req obj
+  // Add player to req obj
   req.player = currentPlayer;
+
+  // Grant access to the protected route
   next();
 });
