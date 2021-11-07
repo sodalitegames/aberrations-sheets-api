@@ -32,6 +32,9 @@ const getId = params => {
 
 exports.getAllForSheet = Model =>
   catchAsync(async (req, res, next) => {
+    // If no sort method has been specified, sort by updatedAt field
+    if (!req.query.sort) req.query.sort = '-updatedAt';
+
     // Execute the query
     // req.sheet comes from sheetController.checkSheetExists
     const features = new APIFeatures(Model.find({ sheetId: req.sheet.id }), req.query).filter().sort().limitFields().paginate();

@@ -186,13 +186,12 @@ const charSheetSchema = new mongoose.Schema(
         },
       },
     },
-    createdAt: Date,
     slug: String,
   },
-  { toJSON: { virtuals: true } }
+  { toJSON: { virtuals: true }, timestamps: true }
 );
 
-// virtual properties
+// Virtual properties
 charSheetSchema.virtual('power').get(function () {
   return this.fortitude.points + this.agility.points + this.persona.points + this.aptitude.points;
 });
@@ -205,18 +204,22 @@ charSheetSchema.virtual('dodgeValue').get(function () {
   return Math.floor(this.agility.points / 3);
 });
 
-// document middleware runs before save and create, but NOT update
+// Document middleware
 charSheetSchema.pre('save', function (next) {
-  this.slug = slugify(this.characterName, { lower: true });
-  this.createdAt = Date.now();
+  // Runs before save and create, but NOT update
+  this.slug = slugify(this.name, { lower: true });
   next();
 });
 
-// charSheetSchema.post(/^find/, function (docs, next) {
-//   // console.log(docs);
-//   console.log(`Query took ${Date.now() - this.start} milliseconds`);
-//   next();
-// });
+charSheetSchema.pre(/^find/, function (next) {
+  this.start = Date.now();
+  next();
+});
+
+charSheetSchema.post(/^find/, function (docs, next) {
+  console.log(`Query took ${Date.now() - this.start} milliseconds`);
+  next();
+});
 
 const CharSheet = mongoose.model('Characters', charSheetSchema);
 

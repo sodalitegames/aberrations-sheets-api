@@ -84,7 +84,7 @@ const creatureSchema = new mongoose.Schema(
       },
     },
   },
-  { toJSON: { virtuals: true } }
+  { toJSON: { virtuals: true }, timestamps: true }
 );
 
 // virtual properties

@@ -2,6 +2,9 @@ const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getSheetsForPlayer = catchAsync(async (req, res, next) => {
+  // If no sort method has been specified, sort by updatedAt field
+  if (!req.query.sort) req.query.sort = '-updatedAt';
+
   // Execute the query
   // req.player comes from authController.requireAuthentication
   // req.SheetModel comes from sheetController.checkSheetType

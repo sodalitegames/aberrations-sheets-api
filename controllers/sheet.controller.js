@@ -219,7 +219,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
-      sheet,
+      sheet: sheet[0],
     },
   });
 });

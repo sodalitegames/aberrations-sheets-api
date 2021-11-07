@@ -194,10 +194,10 @@ const npcSchema = new mongoose.Schema(
       },
     },
   },
-  { toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  { toJSON: { virtuals: true }, toObject: { virtuals: true }, timestamps: true }
 );
 
-// virtual properties
+// Virtual properties
 npcSchema.virtual('power').get(function () {
   return this.fortitude.points + this.agility.points + this.persona.points + this.aptitude.points;
 });
@@ -238,6 +238,13 @@ npcSchema.virtual('usables', {
   ref: 'Usable',
   foreignField: 'npcId',
   localField: '_id',
+});
+
+// Document middleware
+npcSchema.pre(/^find/, function (next) {
+  // Populate all the virtual reference fields
+  this.populate([{ path: 'weapons' }, { path: 'wearables' }, { path: 'consumables' }, { path: 'usables' }, { path: 'augmentations' }]);
+  next();
 });
 
 const Npc = mongoose.model('Npc', npcSchema);
