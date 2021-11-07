@@ -5,6 +5,10 @@ const wearableSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     required: [true, 'A wearable must have an associated sheetId'],
   },
+  npcId: {
+    type: mongoose.ObjectId,
+    ref: 'Npc',
+  },
   name: {
     type: String,
     required: [true, 'A wearable must have a name'],
@@ -16,11 +20,35 @@ const wearableSchema = new mongoose.Schema({
   },
   bodyArea: {
     type: String,
-    enum: [],
+    enum: ['head', 'face', 'torso', 'arms', 'hands', 'legs', 'feet'],
     required: [true, 'A wearable must have a specified bodyArea'],
   },
   statMods: {
-    type: [{ stat: { type: String, enum: ['Fortitude', 'Agility', 'Persona', 'Aptitude'] }, amount: Number }],
+    fortitude: {
+      type: Number,
+      default: 0,
+    },
+    agility: {
+      type: Number,
+      default: 0,
+    },
+    persona: {
+      type: Number,
+      default: 0,
+    },
+    aptitude: {
+      type: Number,
+      default: 0,
+    },
+  },
+  equipped: {
+    type: Boolean,
+    default: false,
+  },
+  quantity: {
+    type: Number,
+    min: 1,
+    default: 1,
   },
 });
 

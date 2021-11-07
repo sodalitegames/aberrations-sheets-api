@@ -5,6 +5,10 @@ const usableSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     required: [true, 'A usable must have an associated sheetId'],
   },
+  npcId: {
+    type: mongoose.ObjectId,
+    ref: 'Npc',
+  },
   name: {
     type: String,
     required: [true, 'A usable must have a name'],
@@ -17,6 +21,15 @@ const usableSchema = new mongoose.Schema({
     type: String,
     enum: ['Unique', 'Common', 'Rare', 'Coveted'],
     required: [true, 'A usable must have a specified type'],
+  },
+  equipped: {
+    type: Boolean,
+    default: false,
+  },
+  quantity: {
+    type: Number,
+    min: 1,
+    default: 1,
   },
 });
 

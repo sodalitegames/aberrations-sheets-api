@@ -5,6 +5,10 @@ const consumableSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     required: [true, 'A consumable must have an associated sheetId'],
   },
+  npcId: {
+    type: mongoose.ObjectId,
+    ref: 'Npc',
+  },
   name: {
     type: String,
     required: [true, 'A consumable must have a name'],
@@ -25,11 +29,20 @@ const consumableSchema = new mongoose.Schema({
   },
   associatedStat: {
     type: String,
-    enum: ['Fortitude', 'Agility', 'Persona', 'Aptitude'],
+    enum: ['fortitude', 'agility', 'persona', 'aptitude'],
   },
   categories: {
     type: [{ name: String, description: String }],
     required: [true, 'A consumable must belong to at least one category'],
+  },
+  equipped: {
+    type: Boolean,
+    default: false,
+  },
+  quantity: {
+    type: Number,
+    min: 1,
+    default: 1,
   },
 });
 

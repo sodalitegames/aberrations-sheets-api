@@ -5,6 +5,10 @@ const weaponSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     required: [true, 'A weapon must have an associated sheetId'],
   },
+  npcId: {
+    type: mongoose.ObjectId,
+    ref: 'Npc',
+  },
   name: {
     type: String,
     required: [true, 'A weapon must have a name'],
@@ -28,12 +32,16 @@ const weaponSchema = new mongoose.Schema({
   },
   associatedStat: {
     type: String,
-    enum: ['Fortitude', 'Agility', 'Persona', 'Aptitude'],
+    enum: ['fortitude', 'agility', 'persona', 'aptitude'],
     required: [true, 'A weapon must have an associatedStat'],
   },
   range: {
     type: String,
     required: [true, 'A weapon must have a range'],
+  },
+  equipped: {
+    type: Boolean,
+    default: false,
   },
 });
 

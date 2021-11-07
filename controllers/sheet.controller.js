@@ -81,10 +81,26 @@ exports.getSheet = catchAsync(async (req, res, next) => {
     pipelineArr = [
       {
         $lookup: {
+          from: 'invites',
+          localField: '_id',
+          foreignField: 'charSheetId',
+          as: 'invites',
+        },
+      },
+      {
+        $lookup: {
           from: 'logs',
           localField: '_id',
           foreignField: 'sheetId',
           as: 'characterLogs',
+        },
+      },
+      {
+        $lookup: {
+          from: 'augmentations',
+          localField: '_id',
+          foreignField: 'sheetId',
+          as: 'augmentations',
         },
       },
     ];
@@ -94,10 +110,50 @@ exports.getSheet = catchAsync(async (req, res, next) => {
     pipelineArr = [
       {
         $lookup: {
+          from: 'invites',
+          localField: '_id',
+          foreignField: 'campSheetId',
+          as: 'invites',
+        },
+      },
+      {
+        $lookup: {
           from: 'logs',
           localField: '_id',
           foreignField: 'sheetId',
           as: 'captainsLogs',
+        },
+      },
+      {
+        $lookup: {
+          from: 'sessions',
+          localField: '_id',
+          foreignField: 'sheetId',
+          as: 'sessions',
+        },
+      },
+      {
+        $lookup: {
+          from: 'npcs',
+          localField: '_id',
+          foreignField: 'sheetId',
+          as: 'npcs',
+        },
+      },
+      {
+        $lookup: {
+          from: 'environments',
+          localField: '_id',
+          foreignField: 'sheetId',
+          as: 'environments',
+        },
+      },
+      {
+        $lookup: {
+          from: 'creatures',
+          localField: '_id',
+          foreignField: 'sheetId',
+          as: 'creatures',
         },
       },
     ];
@@ -112,6 +168,38 @@ exports.getSheet = catchAsync(async (req, res, next) => {
         localField: '_id',
         foreignField: 'sheetId',
         as: 'notes',
+      },
+    },
+    {
+      $lookup: {
+        from: 'weapons',
+        localField: '_id',
+        foreignField: 'sheetId',
+        as: 'weapons',
+      },
+    },
+    {
+      $lookup: {
+        from: 'wearables',
+        localField: '_id',
+        foreignField: 'sheetId',
+        as: 'wearables',
+      },
+    },
+    {
+      $lookup: {
+        from: 'consumables',
+        localField: '_id',
+        foreignField: 'sheetId',
+        as: 'consumables',
+      },
+    },
+    {
+      $lookup: {
+        from: 'usables',
+        localField: '_id',
+        foreignField: 'sheetId',
+        as: 'usables',
       },
     },
   ];

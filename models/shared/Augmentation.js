@@ -5,6 +5,10 @@ const augmentationSchema = new mongoose.Schema({
     type: mongoose.ObjectId,
     required: [true, 'An augmentation must have an associated sheetId'],
   },
+  npcId: {
+    type: mongoose.ObjectId,
+    ref: 'Npc',
+  },
   name: {
     type: String,
     required: [true, 'An augmentation must have a name'],

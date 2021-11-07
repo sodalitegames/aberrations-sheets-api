@@ -23,7 +23,22 @@ sheetRouter.route('/:sheetId').get(sheetController.getSheet).patch(sheetControll
 
 // MOUNT THE NESTED ROUTERS
 
-sheetRouter.use('/:sheetId/logs', sheetController.restrictTo('characters', 'campaigns'), routers.logRouter);
-sheetRouter.use('/:sheetId/notes', sheetController.restrictTo('characters', 'campaigns'), routers.noteRouter);
+// shared routes
+sheetRouter.use('/:sheetId/logs', routers.logRouter);
+sheetRouter.use('/:sheetId/notes', routers.noteRouter);
+sheetRouter.use('/:sheetId/invites', routers.inviteRouter);
+sheetRouter.use('/:sheetId/augmentations', routers.augmentationRouter);
+
+// belongings
+sheetRouter.use('/:sheetId/weapons', routers.weaponRouter);
+sheetRouter.use('/:sheetId/wearables', routers.wearableRouter);
+sheetRouter.use('/:sheetId/usables', routers.usableRouter);
+sheetRouter.use('/:sheetId/consumables', routers.consumableRouter);
+
+// campaign routes
+sheetRouter.use('/:sheetId/sessions', sheetController.restrictTo('campaigns'), routers.sessionRouter);
+sheetRouter.use('/:sheetId/npcs', sheetController.restrictTo('campaigns'), routers.npcRouter);
+sheetRouter.use('/:sheetId/environments', sheetController.restrictTo('campaigns'), routers.environmentRouter);
+sheetRouter.use('/:sheetId/creatures', sheetController.restrictTo('campaigns'), routers.creatureRouter);
 
 module.exports = sheetRouter;

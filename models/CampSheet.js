@@ -19,14 +19,13 @@ const campSheetSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A campaign sheet must have details'],
   },
+  memos: {
+    type: [String],
+    default: [`Hello from your first memo! You can easily delete this and create more whenever you'd like`],
+  },
   createdAt: Date,
   slug: String,
 });
-
-// virtual properties
-// campSheetSchema.virtual('durationWeeks').get(function () {
-//   return this.duration / 7;
-// });
 
 // document middleware runs before save and create, but NOT update
 campSheetSchema.pre('save', function (next) {
@@ -35,26 +34,9 @@ campSheetSchema.pre('save', function (next) {
   next();
 });
 
-// campSheetSchema.pre('save', function (next) {
-//   console.log('Will save document...');
-//   next();
-// });
-
-// campSheetSchema.post('save', function (doc, next) {
-//   console.log(doc);
-//   next();
-// });
-
-campSheetSchema.post(/^find/, function (docs, next) {
-  // console.log(docs);
-  console.log(`Query took ${Date.now() - this.start} milliseconds`);
-  next();
-});
-
-// AGGREGATION MIDDLEWARE
-// campSheetSchema.pre('aggregate', function (next) {
-//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-//   console.log(this.pipeline());
+// campSheetSchema.post(/^find/, function (docs, next) {
+//   // console.log(docs);
+//   console.log(`Query took ${Date.now() - this.start} milliseconds`);
 //   next();
 // });
 

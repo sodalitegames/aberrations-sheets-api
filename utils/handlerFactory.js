@@ -11,8 +11,23 @@ const filterObj = (obj, ...restrictedFields) => {
 };
 
 const getId = params => {
+  // shared
   if (params.logId) return params.logId;
   if (params.noteId) return params.noteId;
+  if (params.inviteId) return params.inviteId;
+  if (params.augmentationId) return params.augmentationId;
+
+  // belongings
+  if (params.weaponId) return params.weaponId;
+  if (params.wearableId) return params.wearableId;
+  if (params.consumableId) return params.consumableId;
+  if (params.usableId) return params.usableId;
+
+  // campaigns
+  if (params.sessionId) return params.sessionId;
+  if (params.npcId) return params.npcId;
+  if (params.environmentId) return params.environmentId;
+  if (params.creatureId) return params.creatureId;
 };
 
 exports.getAllForSheet = Model =>
