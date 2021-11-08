@@ -26,8 +26,8 @@ sheetRouter.route('/:sheetId').get(sheetController.getSheet).patch(sheetControll
 // shared routes
 sheetRouter.use('/:sheetId/logs', routers.logRouter);
 sheetRouter.use('/:sheetId/notes', routers.noteRouter);
-sheetRouter.use('/:sheetId/invites', routers.inviteRouter);
 sheetRouter.use('/:sheetId/augmentations', routers.augmentationRouter);
+sheetRouter.use('/:sheetId/invites', routers.inviteRouter);
 
 // belongings
 sheetRouter.use('/:sheetId/weapons', routers.weaponRouter);

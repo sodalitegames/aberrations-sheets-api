@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-// const validator = require('validator');
 
 const campSheetSchema = new mongoose.Schema(
   {
@@ -8,6 +7,11 @@ const campSheetSchema = new mongoose.Schema(
       type: mongoose.ObjectId,
       required: [true, 'A campaign sheet must have an associated playerId'],
     },
+    ccName: {
+      type: String,
+      required: [true, 'A campaign sheet must have a specified ccName'],
+    },
+    ccNickname: String,
     name: {
       type: String,
       required: [true, 'A campaign sheet must have a name'],
@@ -24,6 +28,7 @@ const campSheetSchema = new mongoose.Schema(
       type: [String],
       default: [`Hello from your first memo! You can easily delete this and create more whenever you'd like`],
     },
+    players: [{ type: mongoose.Schema.ObjectId, ref: 'Characters' }],
     slug: String,
   },
   { timestamps: true }
@@ -38,6 +43,12 @@ campSheetSchema.pre('save', function (next) {
 
 campSheetSchema.pre(/^find/, function (next) {
   this.start = Date.now();
+  next();
+});
+
+campSheetSchema.pre(/^find/, function (next) {
+  // Populate the players' basic details
+  this.populate({ path: 'players', select: 'playerName characterName -campaign' });
   next();
 });
 

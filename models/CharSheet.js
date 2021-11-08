@@ -16,10 +16,10 @@ const charSheetSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A character sheet mmust have a characterName'],
     },
-    // speciesId: {
-    //   type: mongoose.ObjectId,
-    //   required: [true, 'A character sheet must have an associated speciesId'],
-    // },
+    speciesId: {
+      type: mongoose.ObjectId,
+      required: [true, 'A character sheet must have an associated speciesId'],
+    },
     charBackground: {
       type: String,
       required: [true, 'A character sheet must have a charBackground'],
@@ -28,6 +28,7 @@ const charSheetSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A character sheet must have a charDescription'],
     },
+    campaign: { type: mongoose.Schema.ObjectId, ref: 'Campaigns' },
     wallet: {
       type: Number,
       min: 0,
@@ -193,26 +194,32 @@ const charSheetSchema = new mongoose.Schema(
 
 // Virtual properties
 charSheetSchema.virtual('power').get(function () {
-  return this.fortitude.points + this.agility.points + this.persona.points + this.aptitude.points;
+  return this.fortitude.points + this.fortitude.modifier + this.agility.points + this.agility.modifier + this.persona.points + this.persona.modifier + this.aptitude.points + this.aptitude.modifier;
 });
 
 charSheetSchema.virtual('maxHp').get(function () {
-  return this.fortitude.points * 5;
+  return (this.fortitude.points + this.fortitude.modifier) * 5;
 });
 
 charSheetSchema.virtual('dodgeValue').get(function () {
-  return Math.floor(this.agility.points / 3);
+  return Math.floor((this.agility.points + this.agility.modifier) / 3);
 });
 
 // Document middleware
 charSheetSchema.pre('save', function (next) {
   // Runs before save and create, but NOT update
-  this.slug = slugify(this.name, { lower: true });
+  this.slug = slugify(this.characterName, { lower: true });
   next();
 });
 
 charSheetSchema.pre(/^find/, function (next) {
   this.start = Date.now();
+  next();
+});
+
+charSheetSchema.pre(/^find/, function (next) {
+  // Populate the campaign's basic details
+  this.populate({ path: 'campaign', select: 'name overview ccName ccNickname players' });
   next();
 });
 

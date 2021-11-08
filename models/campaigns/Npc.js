@@ -10,10 +10,10 @@ const npcSchema = new mongoose.Schema(
       type: String,
       required: [true, 'An npc must have a name'],
     },
-    // speciesId: {
-    //   type: mongoose.ObjectId,
-    //   required: [true, 'An npc must have an associated speciesId'],
-    // },
+    speciesId: {
+      type: mongoose.ObjectId,
+      required: [true, 'An npc must have an associated speciesId'],
+    },
     diplomacy: {
       type: String,
       enum: ['Ally', 'Neutral', 'Enemy'],
@@ -194,20 +194,20 @@ const npcSchema = new mongoose.Schema(
       },
     },
   },
-  { toJSON: { virtuals: true }, toObject: { virtuals: true }, timestamps: true }
+  { toJSON: { virtuals: true }, timestamps: true }
 );
 
 // Virtual properties
 npcSchema.virtual('power').get(function () {
-  return this.fortitude.points + this.agility.points + this.persona.points + this.aptitude.points;
+  return this.fortitude.points + this.fortitude.modifier + this.agility.points + this.agility.modifier + this.persona.points + this.persona.modifier + this.aptitude.points + this.aptitude.modifier;
 });
 
 npcSchema.virtual('maxHp').get(function () {
-  return this.fortitude.points * 5;
+  return (this.fortitude.points + this.fortitude.modifier) * 5;
 });
 
 npcSchema.virtual('dodgeValue').get(function () {
-  return Math.floor(this.agility.points / 3);
+  return Math.floor((this.agility.points + this.agility.modifier) / 3);
 });
 
 npcSchema.virtual('augmentations', {
@@ -243,7 +243,7 @@ npcSchema.virtual('usables', {
 // Document middleware
 npcSchema.pre(/^find/, function (next) {
   // Populate all the virtual reference fields
-  this.populate([{ path: 'weapons' }, { path: 'wearables' }, { path: 'consumables' }, { path: 'usables' }, { path: 'augmentations' }]);
+  this.populate([{ path: 'augmentations' }, { path: 'weapons' }, { path: 'wearables' }, { path: 'consumables' }, { path: 'usables' }]);
   next();
 });
 
