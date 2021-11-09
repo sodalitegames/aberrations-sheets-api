@@ -1,14 +1,7 @@
-const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
+const catchAsync = require('./catchAsync');
+const AppError = require('./appError');
+const filterObj = require('./filterObj');
 const APIFeatures = require('./apiFeatures');
-
-const filterObj = (obj, ...restrictedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach(el => {
-    if (!restrictedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
 
 const getId = params => {
   // shared
@@ -104,7 +97,7 @@ exports.updateOne = (Model, restrictedFields) =>
     if (!restrictedFields) restrictedFields = [];
 
     // Specify specific fields NOT allowed to be updated
-    const filteredBody = filterObj(req.body, ...restrictedFields);
+    const filteredBody = filterObj.setRestrictedFields(req.body, ...restrictedFields);
 
     // Execute the query
     const doc = await Model.findByIdAndUpdate(docId, filteredBody, {

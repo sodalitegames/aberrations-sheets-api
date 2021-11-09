@@ -6,6 +6,6 @@ const sheetController = require('../../../controllers/sheet.controller');
 const router = express.Router({ mergeParams: true });
 
 router.route('/').get(inviteController.getInvitesForSheet).post(sheetController.restrictTo('campaigns'), inviteController.createInviteForSheet);
-router.route('/:inviteId').get(inviteController.getInvite).patch(inviteController.updateInvite).delete(inviteController.deleteInvite);
+router.route('/:inviteId').get(inviteController.getInvite).patch(inviteController.updateInvite).delete(sheetController.restrictTo('campaigns'), inviteController.deleteInvite);
 
 module.exports = router;

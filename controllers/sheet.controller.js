@@ -1,10 +1,11 @@
-const ObjectId = require('mongoose').Types.ObjectId;
+const mongoose = require('mongoose');
 
 const CharSheet = require('../models/CharSheet');
 const CampSheet = require('../models/CampSheet');
 
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const filterObj = require('../utils/filterObj');
 
 // Import the following models to be used when deleting a character sheet
 const Log = require('../models/shared/Log');
@@ -30,19 +31,11 @@ const allowedFields = {
   campaigns: ['name'],
 };
 
-const filterObj = (obj, ...allowedFields) => {
-  const newObj = {};
-  Object.keys(obj).forEach(el => {
-    if (allowedFields.includes(el)) newObj[el] = obj[el];
-  });
-  return newObj;
-};
-
 exports.restrictTo =
   (...sheetTypes) =>
   (req, res, next) => {
     if (!sheetTypes.includes(req.params.sheetType)) {
-      return next(new AppError(`This route does not exist for ${req.params.sheetType} sheets. Did you mean to use ${sheetTypes} sheets?`, 404));
+      return next(new AppError(`This route does not exist for ${req.params.sheetType}. Did you mean to use ${sheetTypes}?`, 404));
     }
     next();
   };
@@ -399,7 +392,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
 
   const sheet = await req.SheetModel.aggregate([
     {
-      $match: { _id: ObjectId(req.sheet.id) },
+      $match: { _id: mongoose.Types.ObjectId(req.sheet.id) },
     },
     ...pipelineArr,
   ]);
@@ -419,7 +412,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
 
 exports.updateSheet = catchAsync(async (req, res, next) => {
   // Specify specific fields allowed to be updated
-  const filteredBody = filterObj(req.body, ...allowedFields[req.params.sheetType]);
+  const filteredBody = filterObj.setAllowedFields(req.body, ...allowedFields[req.params.sheetType]);
 
   // Update document
   const updatedSheet = await req.SheetModel.findByIdAndUpdate(req.sheet.id, filteredBody, { new: true, runValidators: true });
@@ -486,6 +479,69 @@ exports.deleteSheet = catchAsync(async (req, res, next) => {
     data: {
       sheetsDeleted: 1,
       resourcesDeleted: deletedResources,
+    },
+  });
+});
+
+const removePlayerFromCampaign = async (charId, campId) => {
+  const updatedCharSheet = await CharSheet.findByIdAndUpdate(charId, { campaign: undefined }, { new: true, runValidators: true });
+
+  if (!updatedCharSheet) {
+    return false;
+  }
+
+  const updatedCampSheet = await CampSheet.findByIdAndUpdate(campId, { $pull: { players: charId } }, { new: true, runValidators: true });
+
+  // Rollback changes to character sheet if camp sheet update was unsuccessful
+  if (!updatedCampSheet) {
+    await CharSheet.findByIdAndUpdate(charId, { campaign: campId }, { new: true, runValidators: true });
+    return false;
+  }
+
+  if (updatedCharSheet && updatedCampSheet) return true;
+
+  return false;
+};
+
+exports.leaveCampaign = catchAsync(async (req, res, next) => {
+  if (!req.sheet.campaign) {
+    return next(new AppError('You are not a member of any campaign to leave.', 400));
+  }
+
+  const success = await removePlayerFromCampaign(req.sheet.id, req.sheet.campaign);
+
+  if (!success) {
+    return next(new AppError('An error occured removing you from the campaign. Please try again later.', 500));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      message: 'You have successfully left the campaign.',
+    },
+  });
+});
+
+exports.removePlayer = catchAsync(async (req, res, next) => {
+  if (!mongoose.isValidObjectId(req.body.charId)) {
+    return next(new AppError('The provided charId is not a valid id.', 400));
+  }
+
+  console.log(req.sheet.players);
+  if (!req.sheet.players.find(player => player.id === req.body.charId)) {
+    return next(new AppError('This player is not a member of your campaign.', 400));
+  }
+
+  const success = await removePlayerFromCampaign(req.body.charId, req.sheet.id);
+
+  if (!success) {
+    return next(new AppError('An error occured removing the player from the campaign. Please try again later.', 500));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      message: 'You have successfully removed the player from the campaign.',
     },
   });
 });

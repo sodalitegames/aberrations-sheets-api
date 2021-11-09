@@ -21,6 +21,10 @@ sheetRouter.use('/:sheetId', sheetController.checkSheetExists, sheetController.r
 
 sheetRouter.route('/:sheetId').get(sheetController.getSheet).patch(sheetController.updateSheet).delete(sheetController.deleteSheet);
 
+// routes for leaving or being removed from a campaign
+sheetRouter.post('/:sheetId/leave-campaign', sheetController.restrictTo('characters'), sheetController.leaveCampaign);
+sheetRouter.post('/:sheetId/remove-player', sheetController.restrictTo('campaigns'), sheetController.removePlayer);
+
 // MOUNT THE NESTED ROUTERS
 
 // shared routes
