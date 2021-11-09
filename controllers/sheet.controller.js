@@ -527,7 +527,6 @@ exports.removePlayer = catchAsync(async (req, res, next) => {
     return next(new AppError('The provided charId is not a valid id.', 400));
   }
 
-  console.log(req.sheet.players);
   if (!req.sheet.players.find(player => player.id === req.body.charId)) {
     return next(new AppError('This player is not a member of your campaign.', 400));
   }
