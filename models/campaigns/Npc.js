@@ -210,6 +210,14 @@ npcSchema.virtual('dodgeValue').get(function () {
   return Math.floor((this.agility.points + this.agility.modifier) / 3);
 });
 
+npcSchema.virtual('initiative').get(function () {
+  return this.persona.points + this.persona.modifier;
+});
+
+npcSchema.virtual('assist').get(function () {
+  return Math.floor((this.aptitude.points + this.aptitude.modifier) / 2);
+});
+
 npcSchema.virtual('augmentations', {
   ref: 'Augmentation',
   foreignField: 'npcId',

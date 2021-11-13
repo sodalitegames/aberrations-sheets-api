@@ -205,6 +205,14 @@ charSheetSchema.virtual('dodgeValue').get(function () {
   return Math.floor((this.agility.points + this.agility.modifier) / 3);
 });
 
+charSheetSchema.virtual('initiative').get(function () {
+  return this.persona.points + this.persona.modifier;
+});
+
+charSheetSchema.virtual('assist').get(function () {
+  return Math.floor((this.aptitude.points + this.aptitude.modifier) / 2);
+});
+
 // Document middleware
 charSheetSchema.pre('save', function (next) {
   // Runs before save and create, but NOT update
