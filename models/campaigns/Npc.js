@@ -72,7 +72,7 @@ const npcSchema = new mongoose.Schema(
       },
       modifier: {
         type: Number,
-        min: 0,
+        min: -5,
         max: 5,
         default: 0,
       },
@@ -94,7 +94,7 @@ const npcSchema = new mongoose.Schema(
       },
       modifier: {
         type: Number,
-        min: 0,
+        min: -5,
         max: 5,
         default: 0,
       },
@@ -116,7 +116,7 @@ const npcSchema = new mongoose.Schema(
       },
       modifier: {
         type: Number,
-        min: 0,
+        min: -5,
         max: 5,
         default: 0,
       },
@@ -138,7 +138,7 @@ const npcSchema = new mongoose.Schema(
       },
       modifier: {
         type: Number,
-        min: 0,
+        min: -5,
         max: 5,
         default: 0,
       },

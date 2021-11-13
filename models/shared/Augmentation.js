@@ -10,6 +10,10 @@ const augmentationSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Npc',
     },
+    universalId: {
+      type: mongoose.Schema.ObjectId,
+      required: [true, 'An augmentation must have a universalId'],
+    },
     name: {
       type: String,
       required: [true, 'An augmentation must have a name'],
