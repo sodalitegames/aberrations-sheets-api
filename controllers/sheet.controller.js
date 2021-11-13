@@ -27,7 +27,7 @@ const SheetModels = {
 };
 
 const allowedFields = {
-  characters: ['characterName', 'charDescription', 'charBackground', 'currentHp', 'wallet', 'fortitude', 'agility', 'persona', 'aptitude', 'upgradePoints', 'generalExhaution', 'equipped'],
+  characters: ['characterName', 'charDescription', 'charBackground', 'currentHp', 'wallet', 'fortitude', 'agility', 'persona', 'aptitude', 'upgradePoints', 'generalExhaustion', 'equipped'],
   campaigns: ['name'],
 };
 
