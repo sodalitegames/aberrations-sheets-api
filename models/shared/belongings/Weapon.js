@@ -10,15 +10,13 @@ const weaponSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'Npc',
     },
+    universalId: mongoose.Schema.ObjectId,
     name: {
       type: String,
       required: [true, 'A weapon must have a name'],
     },
     nickname: String,
-    description: {
-      type: String,
-      required: [true, 'A weapon must have a description'],
-    },
+    description: String,
     ability: String,
     type: {
       type: String,
