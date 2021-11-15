@@ -14,7 +14,6 @@ const wearableSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A wearable must have a name'],
     },
-    nickname: String,
     description: {
       type: String,
       required: [true, 'A wearable must have a description'],
@@ -45,11 +44,6 @@ const wearableSchema = new mongoose.Schema(
     equipped: {
       type: Boolean,
       default: false,
-    },
-    quantity: {
-      type: Number,
-      min: 1,
-      default: 1,
     },
   },
   { timestamps: true }

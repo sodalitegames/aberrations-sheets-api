@@ -14,10 +14,7 @@ const consumableSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A consumable must have a name'],
     },
-    description: {
-      type: String,
-      required: [true, 'A consumable must have a description'],
-    },
+    description: String,
     level: {
       type: Number,
       min: 1,
@@ -33,7 +30,7 @@ const consumableSchema = new mongoose.Schema(
       enum: ['fortitude', 'agility', 'persona', 'aptitude'],
     },
     categories: {
-      type: [{ name: String, description: String }],
+      type: [{ name: String, description: String, universalId: mongoose.Schema.ObjectId }],
       required: [true, 'A consumable must belong to at least one category'],
     },
     equipped: {
