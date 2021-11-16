@@ -145,51 +145,71 @@ const npcSchema = new mongoose.Schema(
     },
     equipped: {
       weapons: {
-        type: Number,
-        min: 0,
-        max: 2,
-        default: 0,
+        one: {
+          type: mongoose.ObjectId || null,
+          default: null,
+        },
+        two: {
+          type: mongoose.ObjectId || null,
+          default: null,
+        },
       },
       consumables: {
-        type: Number,
-        min: 0,
-        max: 3,
-        default: 0,
+        one: {
+          type: mongoose.ObjectId || null,
+          default: null,
+        },
+        two: {
+          type: mongoose.ObjectId || null,
+          default: null,
+        },
+        three: {
+          type: mongoose.ObjectId || null,
+          default: null,
+        },
       },
       usables: {
-        type: Number,
-        min: 0,
-        max: 3,
-        default: 0,
+        one: {
+          type: mongoose.ObjectId || null,
+          default: null,
+        },
+        two: {
+          type: mongoose.ObjectId || null,
+          default: null,
+        },
+        three: {
+          type: mongoose.ObjectId || null,
+          default: null,
+        },
       },
       wearables: {
         head: {
-          type: Boolean,
-          default: false,
+          type: mongoose.ObjectId || null,
+          default: null,
         },
         face: {
-          type: Boolean,
-          default: false,
+          type: mongoose.ObjectId || null,
+          default: null,
         },
         torso: {
-          type: Boolean,
-          default: false,
+          type: mongoose.ObjectId || null,
+          default: null,
         },
         arms: {
-          type: Boolean,
-          default: false,
+          type: mongoose.ObjectId || null,
+          default: null,
         },
         hands: {
-          type: Boolean,
-          default: false,
+          type: mongoose.ObjectId || null,
+          default: null,
         },
         legs: {
-          type: Boolean,
-          default: false,
+          type: mongoose.ObjectId || null,
+          default: null,
         },
         feet: {
-          type: Boolean,
-          default: false,
+          type: mongoose.ObjectId || null,
+          default: null,
         },
       },
     },

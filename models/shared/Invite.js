@@ -10,6 +10,14 @@ const inviteSchema = new mongoose.Schema(
       type: mongoose.ObjectId,
       required: [true, 'An invite must have a charSheetId'],
     },
+    campaignName: {
+      type: String,
+      required: [true, 'An invite must have a campaignName'],
+    },
+    ccName: {
+      type: String,
+      required: [true, 'An invite must have a ccName'],
+    },
     message: String,
     status: {
       type: String,
