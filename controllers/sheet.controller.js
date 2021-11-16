@@ -200,7 +200,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
                   {
                     $lookup: {
                       from: 'augmentations',
-                      localField: 'players._id',
+                      localField: '_id',
                       foreignField: 'sheetId',
                       as: 'augmentations',
                     },
@@ -208,7 +208,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
                   {
                     $lookup: {
                       from: 'weapons',
-                      localField: 'players._id',
+                      localField: '_id',
                       foreignField: 'sheetId',
                       as: 'weapons',
                     },
@@ -216,7 +216,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
                   {
                     $lookup: {
                       from: 'wearables',
-                      localField: 'players._id',
+                      localField: '_id',
                       foreignField: 'sheetId',
                       as: 'wearables',
                     },
@@ -224,7 +224,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
                   {
                     $lookup: {
                       from: 'consumables',
-                      localField: 'players._id',
+                      localField: '_id',
                       foreignField: 'sheetId',
                       as: 'consumables',
                     },
@@ -232,7 +232,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
                   {
                     $lookup: {
                       from: 'usables',
-                      localField: 'players._id',
+                      localField: '_id',
                       foreignField: 'sheetId',
                       as: 'usables',
                     },
