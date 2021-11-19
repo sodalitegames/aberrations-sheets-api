@@ -12,6 +12,7 @@ const charSheetSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A character sheet must have a playerName'],
     },
+    playerNickname: String,
     characterName: {
       type: String,
       required: [true, 'A character sheet mmust have a characterName'],
