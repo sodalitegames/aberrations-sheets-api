@@ -84,7 +84,7 @@ const pipelinePieces = {
   charSheetVirtualFields: {
     power: { $sum: ['$fortitude.points', '$fortitude.modifier', '$agility.points', '$agility.modifier', '$persona.points', '$persona.modifier', '$aptitude.points', '$aptitude.modifier'] },
     dodgeValue: { $floor: { $divide: [{ $sum: ['$agility.points', '$agility.modifier'] }, 3] } },
-    maxHp: { $multiply: [{ $sum: ['$fortitude.points', '$fortitude.modifer'] }, 5] },
+    maxHp: { $multiply: [{ $sum: ['$fortitude.points', '$fortitude.modifier'] }, 5] },
     initiative: { $sum: ['$persona.points', '$persona.modifier'] },
     assist: { $floor: { $divide: [{ $sum: ['$aptitude.points', '$aptitude.modifier'] }, 2] } },
   },
