@@ -21,6 +21,10 @@ const charSheetSchema = new mongoose.Schema(
       type: mongoose.ObjectId,
       required: [true, 'A character sheet must have an associated speciesId'],
     },
+    speciesName: {
+      type: String,
+      required: [true, 'A character sheet must have a speciesName'],
+    },
     charBackground: {
       type: String,
       required: [true, 'A character sheet must have a charBackground'],

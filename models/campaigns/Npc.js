@@ -14,6 +14,10 @@ const npcSchema = new mongoose.Schema(
       type: mongoose.ObjectId,
       required: [true, 'An npc must have an associated speciesId'],
     },
+    speciesName: {
+      type: String,
+      required: [true, 'An npc must have a speciesName'],
+    },
     diplomacy: {
       type: String,
       enum: ['Ally', 'Neutral', 'Enemy'],
