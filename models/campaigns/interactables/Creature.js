@@ -25,15 +25,36 @@ const creatureSchema = new mongoose.Schema(
       enum: ['fortitude', 'agility', 'persona', 'aptitude'],
       required: [true, 'A creature must have an attackingStat'],
     },
-    generalExhaustion: {
+    types: {
+      type: [{ name: String, description: String, universalId: mongoose.Schema.ObjectId }],
+      required: [true, 'A creature must have at least one type'],
+    },
+    mortality: {
       type: Number,
-      min: 0,
-      default: 0,
+      min: 1,
+      default: 1,
     },
     currentHp: {
       type: Number,
-      min: 0,
-      required: [true, 'A creature must have a currentHp'],
+      required: [true, 'A creature must be given a starting currentHp'],
+    },
+    conditions: {
+      slowed: {
+        type: Number,
+        default: 0,
+      },
+      agony: {
+        type: Number,
+        default: 0,
+      },
+      injured: {
+        type: Number,
+        default: 0,
+      },
+      disturbed: {
+        type: Number,
+        default: 0,
+      },
     },
     fortitude: {
       points: {
@@ -42,7 +63,7 @@ const creatureSchema = new mongoose.Schema(
         max: 10,
         default: 3,
       },
-      exhaustion: {
+      advantage: {
         type: Number,
         default: 0,
       },
@@ -54,7 +75,7 @@ const creatureSchema = new mongoose.Schema(
         max: 10,
         default: 3,
       },
-      exhaustion: {
+      advantage: {
         type: Number,
         default: 0,
       },
@@ -66,7 +87,7 @@ const creatureSchema = new mongoose.Schema(
         max: 10,
         default: 3,
       },
-      exhaustion: {
+      advantage: {
         type: Number,
         default: 0,
       },
@@ -78,7 +99,7 @@ const creatureSchema = new mongoose.Schema(
         max: 10,
         default: 3,
       },
-      exhaustion: {
+      advantage: {
         type: Number,
         default: 0,
       },

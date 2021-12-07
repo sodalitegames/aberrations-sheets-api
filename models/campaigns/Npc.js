@@ -44,20 +44,37 @@ const npcSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
-    upgradePoints: {
+    mortality: {
       type: Number,
-      min: 0,
-      default: 0,
+      min: 1,
+      default: 1,
     },
-    generalExhaustion: {
+    upgradePoints: {
       type: Number,
       min: 0,
       default: 0,
     },
     currentHp: {
       type: Number,
-      min: 0,
-      default: 15,
+      required: [true, 'An npc must be given a starting currentHp'],
+    },
+    conditions: {
+      slowed: {
+        type: Number,
+        default: 0,
+      },
+      agony: {
+        type: Number,
+        default: 0,
+      },
+      injured: {
+        type: Number,
+        default: 0,
+      },
+      disturbed: {
+        type: Number,
+        default: 0,
+      },
     },
     fortitude: {
       points: {
@@ -66,7 +83,7 @@ const npcSchema = new mongoose.Schema(
         max: 10,
         default: 3,
       },
-      exhaustion: {
+      advantage: {
         type: Number,
         default: 0,
       },
@@ -88,7 +105,7 @@ const npcSchema = new mongoose.Schema(
         max: 10,
         default: 3,
       },
-      exhaustion: {
+      advantage: {
         type: Number,
         default: 0,
       },
@@ -110,7 +127,7 @@ const npcSchema = new mongoose.Schema(
         max: 10,
         default: 3,
       },
-      exhaustion: {
+      advantage: {
         type: Number,
         default: 0,
       },
@@ -132,7 +149,7 @@ const npcSchema = new mongoose.Schema(
         max: 10,
         default: 3,
       },
-      exhaustion: {
+      advantage: {
         type: Number,
         default: 0,
       },

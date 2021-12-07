@@ -38,6 +38,11 @@ const weaponSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A weapon must have a range'],
     },
+    quantity: {
+      type: Number,
+      min: 1,
+      default: 1,
+    },
     equipped: {
       type: Boolean,
       default: false,

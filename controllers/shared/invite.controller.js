@@ -66,7 +66,7 @@ exports.updateInvite = catchAsync(async (req, res, next) => {
       break;
     case 'Revoked':
     // send a message to the character sheet
-    case 'Denied':
+    case 'Declined':
       // send a message to the campaign sheet
       break;
     default:
