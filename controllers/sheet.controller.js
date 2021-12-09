@@ -486,7 +486,7 @@ exports.deleteSheet = catchAsync(async (req, res, next) => {
 });
 
 const removePlayerFromCampaign = async (charId, campId) => {
-  const updatedCharSheet = await CharSheet.findByIdAndUpdate(charId, { campaign: undefined }, { new: true, runValidators: true });
+  const updatedCharSheet = await CharSheet.findByIdAndUpdate(charId, { campaign: null }, { new: true, runValidators: true });
 
   if (!updatedCharSheet) {
     return false;

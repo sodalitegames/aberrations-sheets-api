@@ -88,8 +88,8 @@ exports.updateInvite = catchAsync(async (req, res, next) => {
     res.status(200).json({
       status: 'fail',
       data: {
+        doc: updatedInvite,
         message: 'An error occurred updating the invite status.',
-        updatedInvite,
       },
     });
     return;
@@ -99,6 +99,7 @@ exports.updateInvite = catchAsync(async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: {
+        doc: updatedInvite,
         message: `Invite has been successfully accepted. Welcome to the newest member of the campaign!`,
       },
     });
@@ -108,7 +109,7 @@ exports.updateInvite = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
-      updatedInvite,
+      doc: updatedInvite,
     },
   });
 });
