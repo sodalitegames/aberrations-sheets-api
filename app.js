@@ -8,8 +8,8 @@ const xss = require('xss-clean');
 const cors = require('cors');
 const hpp = require('hpp');
 
-const playerRouter = require('./routers/playerRouter');
-const sheetRouter = require('./routers/sheetRouter');
+const playerRouter = require('./routers/player.router');
+const sheetRouter = require('./routers/sheet.router');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./utils/errorHandler');

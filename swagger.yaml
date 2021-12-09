@@ -10,9 +10,9 @@ paths:
     get:
       summary: List all of a players character or campaign sheets (unaggregated).
       tags:
-        - Player
-        - Character Sheet
-        - Campaign Sheet
+        - Players
+        - Character Sheets
+        - Campaign Sheets
       parameters:
         - in: path
           name: sheetType
@@ -22,9 +22,9 @@ paths:
     post:
       summary: Create a character or campaign sheet for a player.
       tags:
-        - Player
-        - Character Sheet
-        - Campaign Sheet
+        - Players
+        - Character Sheets
+        - Campaign Sheets
       consumes: application/json
       parameters:
         - in: path
@@ -41,11 +41,11 @@ paths:
               - $ref: '#/components/schemas/CampSheet'
   /players/:sheetType/:sheetId:
     get:
-      summary: Fetch a single character or campaign sheet of a player (unaggregated)
+      summary: Fetch a single character or campaign sheet of a player (unaggregated).
       tags:
-        - Player
-        - Character Sheet
-        - Campaign Sheet
+        - Players
+        - Character Sheets
+        - Campaign Sheets
       parameters:
         - in: path
           name: sheetType
@@ -59,10 +59,10 @@ paths:
           description: Which character or campaign sheet to get.
   /:sheetType/:sheetId:
     get:
-      summary: Fetch a single character or campaign sheet (aggregated)
+      summary: Fetch a single character or campaign sheet (aggregated).
       tags:
-        - Character Sheet
-        - Campaign Sheet
+        - Character Sheets
+        - Campaign Sheets
       parameters:
         - in: path
           name: sheetType
@@ -77,8 +77,8 @@ paths:
     patch:
       summary: Update a character or campaign sheet.
       tags:
-        - Character Sheet
-        - Campaign Sheet
+        - Character Sheets
+        - Campaign Sheets
       consumes: application/json
       parameters:
         - in: path
@@ -101,8 +101,8 @@ paths:
     delete:
       summary: Delete a character or campaign sheet.
       tags:
-        - Character Sheet
-        - Campaign Sheet
+        - Character Sheets
+        - Campaign Sheets
       parameters:
         - in: path
           name: sheetType
@@ -114,11 +114,12 @@ paths:
           required: true
           type: string
           description: Which character or campaign sheet to delete.
-  /:sheetType/:sheetId/log:
+
+  /:sheetType/:sheetId/logs:
     get:
       summary: List all logs of a character or campaign sheet.
       tags:
-        - Log
+        - Logs
       parameters:
         - in: path
           name: sheetType
@@ -133,7 +134,7 @@ paths:
     post:
       summary: Create a log for a character or campaign sheet.
       tags:
-        - Log
+        - Logs
       consumes: application/json
       parameters:
         - in: path
@@ -148,14 +149,35 @@ paths:
           description: Which sheet to create the log for.
         - in: body
           name: log
-          description: The log to create
+          description: The log to create.
           schema:
             $ref: '#/components/schemas/Log'
-  /:sheetType/:sheetId/log/:logId:
+  /:sheetType/:sheetId/logs/:logId:
+    get:
+      summary: Get a log.
+      tags:
+        - Logs
+      consumes: application/json
+      parameters:
+        - in: path
+          name: sheetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/sheetType'
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which sheet to get the log for.
+        - in: path
+          name: logId
+          required: true
+          type: string
+          description: Which log to get.
     patch:
       summary: Update a log.
       tags:
-        - Log
+        - Logs
       consumes: application/json
       parameters:
         - in: path
@@ -175,13 +197,13 @@ paths:
           description: Which log to update.
         - in: body
           name: properties
-          description: The properties of the log to update
+          description: The properties of the log to update.
           schema:
             $ref: '#/components/schemas/Log'
     delete:
       summary: Delete a log.
       tags:
-        - Log
+        - Logs
       parameters:
         - in: path
           name: sheetType
@@ -192,12 +214,118 @@ paths:
           name: sheetId
           required: true
           type: string
-          description: Which sheet to create the log for.
+          description: Which sheet to delete the log for.
         - in: path
           name: logId
           required: true
           type: string
           description: Which log to delete.
+
+  /:sheetType/:sheetId/notes:
+    get:
+      summary: List all notes of a character or campaign sheet.
+      tags:
+        - Notes
+      parameters:
+        - in: path
+          name: sheetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/sheetType'
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which sheet to get the notes of.
+    post:
+      summary: Create a note for a character or campaign sheet.
+      tags:
+        - Notes
+      consumes: application/json
+      parameters:
+        - in: path
+          name: sheetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/sheetType'
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which sheet to create the note for.
+        - in: body
+          name: log
+          description: The note to create.
+          schema:
+            $ref: '#/components/schemas/Note'
+  /:sheetType/:sheetId/notes/:logId:
+    get:
+      summary: Get a note.
+      tags:
+        - Notes
+      consumes: application/json
+      parameters:
+        - in: path
+          name: sheetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/sheetType'
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which sheet to get the note for.
+        - in: path
+          name: noteId
+          required: true
+          type: string
+          description: Which note to get.
+    patch:
+      summary: Update a note.
+      tags:
+        - Notes
+      consumes: application/json
+      parameters:
+        - in: path
+          name: sheetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/sheetType'
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which sheet to create the note for.
+        - in: path
+          name: noteId
+          required: true
+          type: string
+          description: Which note to update.
+        - in: body
+          name: properties
+          description: The properties of the note to update.
+          schema:
+            $ref: '#/components/schemas/Note'
+    delete:
+      summary: Delete a note.
+      tags:
+        - Notes
+      parameters:
+        - in: path
+          name: sheetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/sheetType'
+        - in: path
+          name: sheetId
+          required: true
+          type: string
+          description: Which sheet to delete the note for.
+        - in: path
+          name: noteId
+          required: true
+          type: string
+          description: Which note to delete.
 
 components:
   securitySchemes:
@@ -236,6 +364,7 @@ components:
           type: string
         details:
           type: string
+
     Log:
       type: object
       required:
@@ -247,6 +376,15 @@ components:
           format: date
         content:
           type: string
+    Note:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+
+    # Enums
     sheetType:
       type: string
       enum:
