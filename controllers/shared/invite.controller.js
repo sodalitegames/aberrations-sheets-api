@@ -96,13 +96,23 @@ exports.updateInvite = catchAsync(async (req, res, next) => {
   }
 
   if (updatedInvite.status === 'Accepted' && success) {
+    // Fetch the necessary info from the new campaign
+    const campaign = await CampSheet.findById(updatedInvite.sheetId);
+
     res.status(200).json({
       status: 'success',
       data: {
         doc: updatedInvite,
+        campaign: {
+          name: campaign.name,
+          ccName: campaign.ccName,
+          ccNickname: campaign.ccNickname,
+          players: campaign.players,
+        },
         message: `Invite has been successfully accepted. Welcome to the newest member of the campaign!`,
       },
     });
+    return;
   }
 
   // Send the response
