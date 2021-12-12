@@ -6,6 +6,11 @@ const playerSchema = new mongoose.Schema(
       type: mongoose.ObjectId,
       required: [true, 'Must provide ObjectId.'],
     },
+    email: {
+      type: String,
+      lowercase: true,
+      required: [true, 'Must provide email.'],
+    },
   },
   { timestamps: true }
 );
