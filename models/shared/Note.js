@@ -6,10 +6,8 @@ const noteSchema = new mongoose.Schema(
       type: mongoose.ObjectId,
       required: [true, 'A note must have an associated sheetId'],
     },
-    content: {
-      type: String,
-      required: [true, 'A note must have content'],
-    },
+    plainText: String,
+    content: String,
   },
   { timestamps: true }
 );
