@@ -20,8 +20,12 @@ const usableSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['Unique', 'Common', 'Rare', 'Coveted'],
+      enum: ['Common', 'Semi-Common', 'Rare', 'Collectible', 'One of A Kind'],
       required: [true, 'A usable must have a specified type'],
+    },
+    equippable: {
+      type: Boolean,
+      default: true,
     },
     equipped: {
       type: Boolean,

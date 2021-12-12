@@ -27,8 +27,23 @@ const SheetModels = {
 };
 
 const allowedFields = {
-  characters: ['characterName', 'charDescription', 'charBackground', 'currentHp', 'wallet', 'conditions', 'fortitude', 'agility', 'persona', 'aptitude', 'upgradePoints', 'mortality', 'equipped'],
-  campaigns: ['name'],
+  characters: [
+    'characterName',
+    'playerNickname',
+    'charDescription',
+    'charBackground',
+    'currentHp',
+    'wallet',
+    'conditions',
+    'fortitude',
+    'agility',
+    'persona',
+    'aptitude',
+    'upgradePoints',
+    'mortality',
+    'equipped',
+  ],
+  campaigns: ['name', 'overview', 'details', 'ccNickname', 'memos'],
 };
 
 exports.restrictTo =

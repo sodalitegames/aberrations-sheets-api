@@ -26,7 +26,7 @@ exports.getSingleSheetForPlayer = catchAsync(async (req, res, next) => {
   // Get document
   // req.sheet comes from sheetController.checkSheetExists
   // req.SheetModel comes from sheetController.checkSheetType
-  const sheet = await req.SheetModel.findByIdAndUpdate(req.sheet.id);
+  const sheet = await req.SheetModel.findById(req.sheet.id);
 
   // Send the response
   res.status(200).json({
