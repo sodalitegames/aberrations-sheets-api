@@ -36,6 +36,7 @@ const weaponSchema = new mongoose.Schema(
     },
     range: {
       type: String,
+      enum: ['Close', 'Short', 'Long', 'Far'],
       required: [true, 'A weapon must have a range'],
     },
     quantity: {
