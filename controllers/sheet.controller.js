@@ -81,19 +81,31 @@ exports.checkSheetExists = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.requireAuthorization = (req, res, next) => {
+exports.requireAuthorization = catchAsync(async (req, res, next) => {
   // req.player comes from authController.requireAuthorization
   if (!req.player || !req.sheet) {
     return next(new AppError('Cannot authorize. Player and/or Sheet are undefined.', 400));
   }
 
   // req.player comes from authController.requireAuthorization
-  if (req.player.id.toString() !== req.sheet.playerId.toString() && req.player.id.toString() !== req.sheet.ccId.toString()) {
+  if (req.player.id.toString() !== req.sheet.playerId.toString()) {
+    // Check if it is a character sheet and it has a campaign
+    if (req.params.sheetType === 'characters' && req.sheet.campaign) {
+      // Fetch the campaign of the character sheet
+      const campSheet = await CampSheet.findById(req.sheet.campaign);
+      // Give access to the sheet if they are the campaign captain
+      if (req.player.id.toString() === campSheet.playerId.toString()) {
+        req.isCC = true;
+        return next();
+      }
+    }
+
+    // Return authorization error if they are not the player or the campaign captain
     return next(new AppError('You are not authorized to request this route.', 401));
   }
 
   next();
-};
+});
 
 const pipelinePieces = {
   charSheetVirtualFields: {
@@ -423,6 +435,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       sheet: sheet[0],
+      isCC: req.isCC,
     },
   });
 });
