@@ -125,6 +125,7 @@ const pipelinePieces = {
   playerBasicDetails: {
     characterName: 1,
     playerName: 1,
+    playerNickname: 1,
   },
 };
 
@@ -335,7 +336,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
         $lookup: {
           from: 'invites',
           localField: '_id',
-          foreignField: 'campSheetId',
+          foreignField: 'sheetId',
           as: 'invites',
         },
       },
@@ -435,7 +436,11 @@ exports.getSheet = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       sheet: sheet[0],
-      isCC: req.isCC,
+      permissions: req.isCC
+        ? {
+            isCC: req.isCC,
+          }
+        : undefined,
     },
   });
 });
