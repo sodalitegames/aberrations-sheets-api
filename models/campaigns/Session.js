@@ -9,6 +9,8 @@ const sessionSchema = new mongoose.Schema(
     name: String,
     dateScheduled: Date,
     datePlayed: Date,
+    completed: Boolean,
+    active: Boolean,
     content: {
       type: String,
       required: [true, 'A session must have content'],
