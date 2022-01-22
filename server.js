@@ -1,24 +1,47 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 
+const sockets = require('./sockets');
+
+// Uncaught Exceptions
 process.on('uncaughtException', err => {
   console.log(err);
   console.log('Uncaught Exception. Shutting down...');
   process.exit(1);
 });
 
-const app = require('./app');
+const expressServer = require('./app');
 
 dotenv.config({ path: './config.env' });
 
+// Connect to mongodb via mongoose connection
 mongoose.connect(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log(`db connection successful`));
 
 const port = process.env.PORT || 2341;
 
-const server = app.listen(port, () => {
+// Create http server using express server
+const httpServer = createServer(expressServer);
+
+// Create and attach socket.io server to http server
+const socketServer = new Server(httpServer, {
+  cors: {
+    origin: process.env.SOCKET_CLIENT,
+    allowedHeaders: ['socket-header-secret'],
+    credentials: true,
+  },
+});
+
+// Load the http server with attached socket.io server
+const server = httpServer.listen(port, () => {
   console.log(`Server listening on port ${port}...`);
 });
 
+// Register all socket.io connections
+sockets.listen(socketServer);
+
+// Unhandled Rejections
 process.on('unhandledRejection', err => {
   console.log(err);
   console.log('Unhandled Rejection. Shutting down...');
