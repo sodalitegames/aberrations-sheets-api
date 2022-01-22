@@ -538,6 +538,7 @@ const removePlayerFromCampaign = async (charId, campId) => {
   return false;
 };
 
+// Only Character Sheets can hit this route
 exports.leaveCampaign = catchAsync(async (req, res, next) => {
   if (!req.sheet.campaign) {
     return next(new AppError('You are not a member of any campaign to leave.', 400));
@@ -554,9 +555,13 @@ exports.leaveCampaign = catchAsync(async (req, res, next) => {
     data: {
       message: 'You have successfully left the campaign.',
     },
+    metadata: {
+      campId: req.sheet.campaign,
+    },
   });
 });
 
+// Only Campaign Sheets can hit this route
 exports.removePlayer = catchAsync(async (req, res, next) => {
   if (!mongoose.isValidObjectId(req.body.charId)) {
     return next(new AppError('The provided charId is not a valid id.', 400));
@@ -576,6 +581,9 @@ exports.removePlayer = catchAsync(async (req, res, next) => {
     status: 'success',
     data: {
       message: 'You have successfully removed the player from the campaign.',
+    },
+    metadata: {
+      charId: req.body.charId,
     },
   });
 });

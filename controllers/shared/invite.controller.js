@@ -33,6 +33,25 @@ exports.createInviteForSheet = factory.createOneForSheet(Invite);
 exports.getInvite = factory.getOne(Invite); // optional: populateOptions {path: 'reviews'}
 exports.deleteInvite = factory.deleteOne(Invite);
 
+exports.deleteInvite = catchAsync(async (req, res, next) => {
+  // Execute the query
+  const invite = await Invite.findByIdAndDelete(req.params.inviteId);
+
+  if (!invite) {
+    return next(new AppError(`No invite found with id ${invite}`, 404));
+  }
+
+  // Send the response
+  res.status(200).json({
+    status: 'success',
+    data: null,
+    metadata: {
+      campId: invite.sheetId,
+      charId: invite.charSheetId,
+    },
+  });
+});
+
 exports.updateInvite = catchAsync(async (req, res, next) => {
   // Specify specific fields allowed to be updated
   const filteredBody = filterObj.setAllowedFields(req.body, 'status', 'message');
