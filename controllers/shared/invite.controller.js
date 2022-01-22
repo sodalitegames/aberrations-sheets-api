@@ -31,7 +31,6 @@ const addPlayerToCampaign = async (charId, campId) => {
 exports.getInvitesForSheet = factory.getAllForSheet(Invite);
 exports.createInviteForSheet = factory.createOneForSheet(Invite);
 exports.getInvite = factory.getOne(Invite); // optional: populateOptions {path: 'reviews'}
-exports.deleteInvite = factory.deleteOne(Invite);
 
 exports.deleteInvite = catchAsync(async (req, res, next) => {
   // Execute the query
