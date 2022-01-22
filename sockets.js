@@ -20,9 +20,9 @@ function listen(io) {
       socket.to(room).emit('message', `client ${socket.id} left character room ${room}`);
     });
 
-    socket.on('changes', ({ room, type, args }) => {
-      console.log('changes', { room, type, args });
-      socket.to(room).emit('updates', { type, args });
+    socket.on('changes', ({ sheet, room, type, args }) => {
+      console.log('changes', { sheet, room, type, args });
+      socket.to(room).emit('updates', { sheet, room, type, args });
     });
 
     socket.on('message', ({ room, message }) => {
@@ -50,9 +50,9 @@ function listen(io) {
       socket.to(room).emit('message', `client ${socket.id} left campaign room ${room}`);
     });
 
-    socket.on('changes', ({ room, type, args }) => {
-      console.log('changes', { room, type, args });
-      socket.to(room).emit('updates', { type, args });
+    socket.on('changes', ({ sheet, room, type, args }) => {
+      console.log('changes', { sheet, room, type, args });
+      socket.to(room).emit('updates', { sheet, room, type, args });
     });
 
     socket.on('message', ({ room, message }) => {

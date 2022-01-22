@@ -556,7 +556,8 @@ exports.leaveCampaign = catchAsync(async (req, res, next) => {
       message: 'You have successfully left the campaign.',
     },
     metadata: {
-      campId: req.sheet.campaign,
+      charId: req.sheet.id,
+      campId: req.sheet.campaign._id,
     },
   });
 });
@@ -584,6 +585,7 @@ exports.removePlayer = catchAsync(async (req, res, next) => {
     },
     metadata: {
       charId: req.body.charId,
+      campId: req.sheet.id,
     },
   });
 });
