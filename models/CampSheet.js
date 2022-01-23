@@ -48,7 +48,7 @@ campSheetSchema.pre(/^find/, function (next) {
 
 campSheetSchema.pre(/^find/, function (next) {
   // Populate the players' basic details
-  this.populate({ path: 'players', select: 'playerName characterName -campaign' });
+  this.populate({ path: 'players', select: 'playerName playerNickname characterName -campaign' });
   next();
 });
 

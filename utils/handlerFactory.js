@@ -9,6 +9,7 @@ const getId = params => {
   if (params.noteId) return params.noteId;
   if (params.inviteId) return params.inviteId;
   if (params.augmentationId) return params.augmentationId;
+  if (params.transactionId) return params.transactionId;
 
   // belongings
   if (params.weaponId) return params.weaponId;

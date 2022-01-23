@@ -42,6 +42,10 @@ const consumableSchema = new mongoose.Schema(
       min: 1,
       default: 1,
     },
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );

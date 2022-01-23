@@ -234,6 +234,10 @@ const npcSchema = new mongoose.Schema(
         },
       },
     },
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
   { toJSON: { virtuals: true }, timestamps: true }
 );

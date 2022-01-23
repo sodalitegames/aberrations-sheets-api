@@ -3,6 +3,7 @@ module.exports = {
   noteRouter: require('./shared/note.router'),
   inviteRouter: require('./shared/invite.router'),
   augmentationRouter: require('./shared/augmentation.router'),
+  transactionRouter: require('./shared/transaction.router'),
   weaponRouter: require('./shared/belongings/weapon.router'),
   wearableRouter: require('./shared/belongings/wearable.router'),
   consumableRouter: require('./shared/belongings/consumable.router'),

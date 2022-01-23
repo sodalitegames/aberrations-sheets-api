@@ -230,6 +230,10 @@ const charSheetSchema = new mongoose.Schema(
       },
     },
     slug: String,
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
   { toJSON: { virtuals: true }, timestamps: true }
 );

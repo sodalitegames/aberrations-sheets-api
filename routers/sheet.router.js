@@ -32,6 +32,7 @@ sheetRouter.use('/:sheetId/logs', routers.logRouter);
 sheetRouter.use('/:sheetId/notes', routers.noteRouter);
 sheetRouter.use('/:sheetId/augmentations', routers.augmentationRouter);
 sheetRouter.use('/:sheetId/invites', routers.inviteRouter);
+sheetRouter.use('/:sheetId/transactions', routers.transactionRouter);
 
 // belongings
 sheetRouter.use('/:sheetId/weapons', routers.weaponRouter);

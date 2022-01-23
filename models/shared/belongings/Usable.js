@@ -36,6 +36,15 @@ const usableSchema = new mongoose.Schema(
       min: 1,
       default: 1,
     },
+    unit: {
+      type: String,
+      required: [true, 'A usable must have a unit of measurement'],
+      default: 'Units',
+    },
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );
