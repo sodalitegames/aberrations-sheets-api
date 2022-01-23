@@ -14,6 +14,10 @@ const environmentSchema = new mongoose.Schema(
       type: String,
       required: [true, 'An environment must have a description'],
     },
+    active: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );
