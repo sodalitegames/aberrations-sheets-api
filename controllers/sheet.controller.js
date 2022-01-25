@@ -39,9 +39,8 @@ const allowedFields = {
     'agility',
     'persona',
     'aptitude',
-    'upgradePoints',
+    'spentUpgradePoints',
     'mortality',
-    'equipped',
   ],
   campaigns: ['name', 'overview', 'details', 'ccNickname', 'memos'],
 };
@@ -114,6 +113,12 @@ const pipelinePieces = {
     maxHp: { $multiply: [{ $sum: ['$fortitude.points', '$fortitude.modifier'] }, 5] },
     initiative: { $sum: ['$persona.points', '$persona.modifier'] },
     assist: { $floor: { $divide: [{ $sum: ['$aptitude.points', '$aptitude.modifier'] }, 2] } },
+    upgradePoints: {
+      $subtract: [
+        { $sum: ['$fortitude.points', '$fortitude.modifier', '$agility.points', '$agility.modifier', '$persona.points', '$persona.modifier', '$aptitude.points', '$aptitude.modifier'] },
+        { $sum: ['$spentUpgradePoints', 12] },
+      ],
+    },
   },
   campaignBasicDetails: {
     name: 1,

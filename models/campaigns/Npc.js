@@ -49,7 +49,7 @@ const npcSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
-    upgradePoints: {
+    spentUpgradePoints: {
       type: Number,
       min: 0,
       default: 0,
@@ -164,76 +164,6 @@ const npcSchema = new mongoose.Schema(
         default: 0,
       },
     },
-    equipped: {
-      weapons: {
-        one: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        two: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-      consumables: {
-        one: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        two: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        three: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-      usables: {
-        one: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        two: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        three: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-      wearables: {
-        head: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        face: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        torso: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        arms: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        hands: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        legs: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        feet: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-    },
     active: {
       type: Boolean,
       default: true,
@@ -261,6 +191,12 @@ npcSchema.virtual('initiative').get(function () {
 
 npcSchema.virtual('assist').get(function () {
   return Math.floor((this.aptitude.points + this.aptitude.modifier) / 2);
+});
+
+npcSchema.virtual('upgradePoints').get(function () {
+  const power =
+    this.fortitude.points + this.fortitude.modifier + this.agility.points + this.agility.modifier + this.persona.points + this.persona.modifier + this.aptitude.points + this.aptitude.modifier;
+  return power - this.spentUpgradePoints - 12;
 });
 
 npcSchema.virtual('augmentations', {
