@@ -41,7 +41,6 @@ const npcSchema = new mongoose.Schema(
     },
     wallet: {
       type: Number,
-      min: 0,
       default: 0,
     },
     mortality: {
@@ -167,6 +166,10 @@ const npcSchema = new mongoose.Schema(
     active: {
       type: Boolean,
       default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
     },
   },
   { toJSON: { virtuals: true }, timestamps: true }

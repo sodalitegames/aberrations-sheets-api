@@ -108,6 +108,10 @@ const creatureSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
   },
   { toJSON: { virtuals: true }, timestamps: true }
 );

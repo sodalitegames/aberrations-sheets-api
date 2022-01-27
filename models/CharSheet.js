@@ -36,7 +36,6 @@ const charSheetSchema = new mongoose.Schema(
     campaign: { type: mongoose.Schema.ObjectId, ref: 'Campaigns' },
     wallet: {
       type: Number,
-      min: 0,
       default: 0,
     },
     mortality: {

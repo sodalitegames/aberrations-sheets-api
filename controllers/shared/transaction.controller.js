@@ -43,11 +43,11 @@ const updateReceivingSheet = async transaction => {
   switch (transaction.status) {
     case 'Accepted':
       if ((transaction.documentType === 'wallet' || transaction.sellPrice) && transaction.receivingSheetType === 'characters') {
-        const amount = transaction.sellPrice || transaction.document.amount;
+        const amount = transaction.sellPrice ? -parseInt(transaction.sellPrice) : parseInt(transaction.document.amount);
 
         recipientSheet = await CharSheet.findByIdAndUpdate(
           transaction.receivingSheetId,
-          { $inc: { wallet: -parseInt(amount) } },
+          { $inc: { wallet: amount } },
           {
             new: true,
             runValidators: true,
@@ -56,11 +56,11 @@ const updateReceivingSheet = async transaction => {
       }
 
       if ((transaction.documentType === 'wallet' || transaction.sellPrice) && transaction.receivingSheetType === 'campaigns') {
-        const amount = transaction.sellPrice || transaction.document.amount;
+        const amount = transaction.sellPrice ? -parseInt(transaction.sellPrice) : parseInt(transaction.document.amount);
 
         recipientSheet = await CampSheet.findByIdAndUpdate(
           transaction.receivingSheetId,
-          { $inc: { wallet: -parseInt(amount) } },
+          { $inc: { wallet: amount } },
           {
             new: true,
             runValidators: true,
@@ -109,11 +109,11 @@ const updateSendingSheet = async transaction => {
   let senderSheet;
 
   if ((transaction.documentType === 'wallet' || transaction.sellPrice) && transaction.sheetType === 'characters') {
-    const amount = transaction.sellPrice || transaction.document.amount;
+    const amount = transaction.sellPrice ? parseInt(transaction.sellPrice) : -parseInt(transaction.document.amount);
 
     senderSheet = await CharSheet.findByIdAndUpdate(
       transaction.sheetId,
-      { $inc: { wallet: parseInt(amount) } },
+      { $inc: { wallet: amount } },
       {
         new: true,
         runValidators: true,
@@ -122,11 +122,11 @@ const updateSendingSheet = async transaction => {
   }
 
   if ((transaction.documentType === 'wallet' || transaction.sellPrice) && transaction.sheetType === 'campaigns') {
-    const amount = transaction.sellPrice || transaction.document.amount;
+    const amount = transaction.sellPrice ? parseInt(transaction.sellPrice) : -parseInt(transaction.document.amount);
 
     senderSheet = await CampSheet.findByIdAndUpdate(
       transaction.sheetId,
-      { $inc: { wallet: parseInt(amount) } },
+      { $inc: { wallet: amount } },
       {
         new: true,
         runValidators: true,
@@ -228,7 +228,7 @@ exports.updateTransaction = catchAsync(async (req, res, next) => {
     return;
   }
 
-  if (updatedTransaction.status === 'Accepted' && recipientResource) {
+  if (updatedTransaction.status === 'Accepted') {
     // SECOND - if everything was successful, update the paying sheet / archive and update the old resource
     const { senderSheet, senderResource } = await updateSendingSheet(updatedTransaction);
 
