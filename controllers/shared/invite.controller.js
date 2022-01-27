@@ -55,9 +55,6 @@ exports.updateInvite = catchAsync(async (req, res, next) => {
   // Specify specific fields allowed to be updated
   const filteredBody = filterObj.setAllowedFields(req.body, 'status', 'message');
 
-  // If the invite has been
-  if (filteredBody.status === 'Accepted') inviteAccepted = true;
-
   // Get the invite
   const invite = await Invite.findById(req.params.inviteId);
 
@@ -122,6 +119,7 @@ exports.updateInvite = catchAsync(async (req, res, next) => {
       data: {
         doc: updatedInvite,
         campaign: {
+          _id: campaign._id,
           name: campaign.name,
           ccName: campaign.ccName,
           ccNickname: campaign.ccNickname,

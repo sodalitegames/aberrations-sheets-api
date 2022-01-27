@@ -42,7 +42,7 @@ const allowedFields = {
     'spentUpgradePoints',
     'mortality',
   ],
-  campaigns: ['name', 'overview', 'details', 'ccNickname', 'memos'],
+  campaigns: ['name', 'overview', 'details', 'ccNickname', 'memos', 'wallet'],
 };
 
 exports.restrictTo =

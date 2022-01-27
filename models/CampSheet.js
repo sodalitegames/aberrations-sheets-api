@@ -28,6 +28,11 @@ const campSheetSchema = new mongoose.Schema(
       type: [String],
       default: [`Hello from your first memo! You can easily delete this and create more whenever you'd like`],
     },
+    wallet: {
+      type: Number,
+      min: 0,
+      default: 0,
+    },
     players: [{ type: mongoose.Schema.ObjectId, ref: 'Characters' }],
     slug: String,
   },

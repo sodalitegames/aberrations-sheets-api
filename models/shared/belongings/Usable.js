@@ -45,6 +45,11 @@ const usableSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
+    metadata: mongoose.Mixed,
   },
   { timestamps: true }
 );
