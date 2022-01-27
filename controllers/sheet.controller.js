@@ -11,6 +11,7 @@ const filterObj = require('../utils/filterObj');
 const Log = require('../models/shared/Log');
 const Note = require('../models/shared/Note');
 const Invite = require('../models/shared/Invite');
+const Transaction = require('../models/shared/Transaction');
 const Augmentation = require('../models/shared/Augmentation');
 const Weapon = require('../models/shared/belongings/Weapon');
 const Wearable = require('../models/shared/belongings/Wearable');
@@ -519,8 +520,9 @@ exports.deleteSheet = catchAsync(async (req, res, next) => {
   const wearables = await Wearable.deleteMany({ sheetId: req.sheet.id });
   const consumables = await Consumable.deleteMany({ sheetId: req.sheet.id });
   const usables = await Usable.deleteMany({ sheetId: req.sheet.id });
+  const transactions = await Transaction.deleteMany({ sheetId: req.sheet.id });
 
-  deletedCount = [...deletedCount, logs, notes, augmentations, weapons, wearables, consumables, usables];
+  deletedCount = [...deletedCount, logs, notes, augmentations, weapons, wearables, consumables, usables, transactions];
 
   const deletedResources = deletedCount.reduce((prev, curr) => {
     return prev + curr.deletedCount;
