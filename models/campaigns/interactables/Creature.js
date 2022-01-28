@@ -129,6 +129,14 @@ creatureSchema.virtual('dodgeValue').get(function () {
   return Math.floor(this.agility.points / 3);
 });
 
+creatureSchema.virtual('initiative').get(function () {
+  return this.persona.points;
+});
+
+creatureSchema.virtual('assist').get(function () {
+  return Math.floor(this.aptitude.points / 2);
+});
+
 const Creature = mongoose.model('Creature', creatureSchema);
 
 module.exports = Creature;

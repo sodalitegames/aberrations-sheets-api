@@ -373,8 +373,8 @@ exports.getSheet = catchAsync(async (req, res, next) => {
       {
         $lookup: {
           from: 'creatures',
-          localField: '_id',
-          foreignField: 'sheetId',
+          let: { currId: '$_id' },
+          pipeline: [{ $match: { $expr: { $eq: ['$sheetId', '$$currId'] } } }, { $addFields: pipelinePieces.charSheetVirtualFields }],
           as: 'creatures',
         },
       },

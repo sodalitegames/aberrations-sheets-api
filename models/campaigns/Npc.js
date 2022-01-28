@@ -27,6 +27,10 @@ const npcSchema = new mongoose.Schema(
       type: String,
       enum: ['Combat', 'Athlete', 'Politician', 'Scoundrel', 'Academic', 'Pedestrian'],
     },
+    levelId: {
+      type: mongoose.ObjectId,
+      required: [true, 'An npc must have an associated levelId'],
+    },
     temperament: {
       type: String,
       enum: ['Earth', 'Fire', 'Water', 'Air'],
@@ -79,7 +83,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 10,
         default: 3,
       },
       advantage: {
@@ -101,7 +105,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 10,
         default: 3,
       },
       advantage: {
@@ -123,7 +127,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 10,
         default: 3,
       },
       advantage: {
@@ -145,7 +149,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 10,
         default: 3,
       },
       advantage: {
