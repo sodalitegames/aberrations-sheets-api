@@ -27,6 +27,10 @@ const npcSchema = new mongoose.Schema(
       type: String,
       enum: ['Combat', 'Athlete', 'Politician', 'Scoundrel', 'Academic', 'Pedestrian'],
     },
+    levelId: {
+      type: mongoose.ObjectId,
+      required: [true, 'An npc must have an associated levelId'],
+    },
     temperament: {
       type: String,
       enum: ['Earth', 'Fire', 'Water', 'Air'],
@@ -41,7 +45,6 @@ const npcSchema = new mongoose.Schema(
     },
     wallet: {
       type: Number,
-      min: 0,
       default: 0,
     },
     mortality: {
@@ -49,7 +52,7 @@ const npcSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
-    upgradePoints: {
+    spentUpgradePoints: {
       type: Number,
       min: 0,
       default: 0,
@@ -80,7 +83,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 10,
         default: 3,
       },
       advantage: {
@@ -102,7 +105,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 10,
         default: 3,
       },
       advantage: {
@@ -124,7 +127,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 10,
         default: 3,
       },
       advantage: {
@@ -146,7 +149,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 10,
         default: 3,
       },
       advantage: {
@@ -164,79 +167,13 @@ const npcSchema = new mongoose.Schema(
         default: 0,
       },
     },
-    equipped: {
-      weapons: {
-        one: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        two: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-      consumables: {
-        one: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        two: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        three: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-      usables: {
-        one: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        two: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        three: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-      wearables: {
-        head: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        face: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        torso: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        arms: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        hands: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        legs: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        feet: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-    },
     active: {
       type: Boolean,
       default: true,
+    },
+    archived: {
+      type: Boolean,
+      default: false,
     },
   },
   { toJSON: { virtuals: true }, timestamps: true }
@@ -261,6 +198,12 @@ npcSchema.virtual('initiative').get(function () {
 
 npcSchema.virtual('assist').get(function () {
   return Math.floor((this.aptitude.points + this.aptitude.modifier) / 2);
+});
+
+npcSchema.virtual('upgradePoints').get(function () {
+  const power =
+    this.fortitude.points + this.fortitude.modifier + this.agility.points + this.agility.modifier + this.persona.points + this.persona.modifier + this.aptitude.points + this.aptitude.modifier;
+  return power - this.spentUpgradePoints - 12;
 });
 
 npcSchema.virtual('augmentations', {

@@ -36,7 +36,6 @@ const charSheetSchema = new mongoose.Schema(
     campaign: { type: mongoose.Schema.ObjectId, ref: 'Campaigns' },
     wallet: {
       type: Number,
-      min: 0,
       default: 0,
     },
     mortality: {
@@ -44,7 +43,7 @@ const charSheetSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
-    upgradePoints: {
+    spentUpgradePoints: {
       type: Number,
       min: 0,
       default: 0,
@@ -159,76 +158,6 @@ const charSheetSchema = new mongoose.Schema(
         default: 0,
       },
     },
-    equipped: {
-      weapons: {
-        one: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        two: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-      consumables: {
-        one: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        two: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        three: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-      usables: {
-        one: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        two: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        three: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-      wearables: {
-        head: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        face: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        torso: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        arms: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        hands: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        legs: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-        feet: {
-          type: mongoose.ObjectId || null,
-          default: null,
-        },
-      },
-    },
     slug: String,
     active: {
       type: Boolean,
@@ -257,6 +186,12 @@ charSheetSchema.virtual('initiative').get(function () {
 
 charSheetSchema.virtual('assist').get(function () {
   return Math.floor((this.aptitude.points + this.aptitude.modifier) / 2);
+});
+
+charSheetSchema.virtual('upgradePoints').get(function () {
+  const power =
+    this.fortitude.points + this.fortitude.modifier + this.agility.points + this.agility.modifier + this.persona.points + this.persona.modifier + this.aptitude.points + this.aptitude.modifier;
+  return power - this.spentUpgradePoints - 12;
 });
 
 // Document middleware

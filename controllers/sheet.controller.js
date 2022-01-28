@@ -11,6 +11,7 @@ const filterObj = require('../utils/filterObj');
 const Log = require('../models/shared/Log');
 const Note = require('../models/shared/Note');
 const Invite = require('../models/shared/Invite');
+const Transaction = require('../models/shared/Transaction');
 const Augmentation = require('../models/shared/Augmentation');
 const Weapon = require('../models/shared/belongings/Weapon');
 const Wearable = require('../models/shared/belongings/Wearable');
@@ -39,11 +40,10 @@ const allowedFields = {
     'agility',
     'persona',
     'aptitude',
-    'upgradePoints',
+    'spentUpgradePoints',
     'mortality',
-    'equipped',
   ],
-  campaigns: ['name', 'overview', 'details', 'ccNickname', 'memos'],
+  campaigns: ['name', 'overview', 'details', 'ccNickname', 'memos', 'wallet'],
 };
 
 exports.restrictTo =
@@ -114,6 +114,12 @@ const pipelinePieces = {
     maxHp: { $multiply: [{ $sum: ['$fortitude.points', '$fortitude.modifier'] }, 5] },
     initiative: { $sum: ['$persona.points', '$persona.modifier'] },
     assist: { $floor: { $divide: [{ $sum: ['$aptitude.points', '$aptitude.modifier'] }, 2] } },
+    upgradePoints: {
+      $subtract: [
+        { $sum: ['$fortitude.points', '$fortitude.modifier', '$agility.points', '$agility.modifier', '$persona.points', '$persona.modifier', '$aptitude.points', '$aptitude.modifier'] },
+        { $sum: ['$spentUpgradePoints', 12] },
+      ],
+    },
   },
   campaignBasicDetails: {
     name: 1,
@@ -367,8 +373,8 @@ exports.getSheet = catchAsync(async (req, res, next) => {
       {
         $lookup: {
           from: 'creatures',
-          localField: '_id',
-          foreignField: 'sheetId',
+          let: { currId: '$_id' },
+          pipeline: [{ $match: { $expr: { $eq: ['$sheetId', '$$currId'] } } }, { $addFields: pipelinePieces.charSheetVirtualFields }],
           as: 'creatures',
         },
       },
@@ -514,8 +520,9 @@ exports.deleteSheet = catchAsync(async (req, res, next) => {
   const wearables = await Wearable.deleteMany({ sheetId: req.sheet.id });
   const consumables = await Consumable.deleteMany({ sheetId: req.sheet.id });
   const usables = await Usable.deleteMany({ sheetId: req.sheet.id });
+  const transactions = await Transaction.deleteMany({ sheetId: req.sheet.id });
 
-  deletedCount = [...deletedCount, logs, notes, augmentations, weapons, wearables, consumables, usables];
+  deletedCount = [...deletedCount, logs, notes, augmentations, weapons, wearables, consumables, usables, transactions];
 
   const deletedResources = deletedCount.reduce((prev, curr) => {
     return prev + curr.deletedCount;

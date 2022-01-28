@@ -6,9 +6,19 @@ const transactionSchema = new mongoose.Schema(
       type: mongoose.ObjectId,
       required: [true, 'A transaction must have a sending sheetId'],
     },
+    sheetType: {
+      type: String,
+      enum: ['characters', 'campaigns'],
+      required: [true, 'A transaction must have a sending sheetType'],
+    },
     receivingSheetId: {
       type: mongoose.ObjectId,
       required: [true, 'A transaction must have a receivingSheetId'],
+    },
+    receivingSheetType: {
+      type: String,
+      enum: ['characters', 'campaigns'],
+      required: [true, 'A transaction must have a receivingSheetType'],
     },
     senderName: {
       type: String,

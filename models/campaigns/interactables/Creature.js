@@ -108,6 +108,10 @@ const creatureSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
   },
   { toJSON: { virtuals: true }, timestamps: true }
 );
@@ -123,6 +127,14 @@ creatureSchema.virtual('maxHp').get(function () {
 
 creatureSchema.virtual('dodgeValue').get(function () {
   return Math.floor(this.agility.points / 3);
+});
+
+creatureSchema.virtual('initiative').get(function () {
+  return this.persona.points;
+});
+
+creatureSchema.virtual('assist').get(function () {
+  return Math.floor(this.aptitude.points / 2);
 });
 
 const Creature = mongoose.model('Creature', creatureSchema);
