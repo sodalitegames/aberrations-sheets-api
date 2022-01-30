@@ -189,8 +189,7 @@ charSheetSchema.virtual('assist').get(function () {
 });
 
 charSheetSchema.virtual('upgradePoints').get(function () {
-  const power =
-    this.fortitude.points + this.fortitude.modifier + this.agility.points + this.agility.modifier + this.persona.points + this.persona.modifier + this.aptitude.points + this.aptitude.modifier;
+  const power = this.fortitude.points + this.agility.points + this.persona.points + this.aptitude.points;
   return power - this.spentUpgradePoints - 12;
 });
 
