@@ -115,10 +115,7 @@ const pipelinePieces = {
     initiative: { $sum: ['$persona.points', '$persona.modifier'] },
     assist: { $floor: { $divide: [{ $sum: ['$aptitude.points', '$aptitude.modifier'] }, 2] } },
     upgradePoints: {
-      $subtract: [
-        { $sum: ['$fortitude.points', '$fortitude.modifier', '$agility.points', '$agility.modifier', '$persona.points', '$persona.modifier', '$aptitude.points', '$aptitude.modifier'] },
-        { $sum: ['$spentUpgradePoints', 12] },
-      ],
+      $subtract: [{ $sum: ['$fortitude.points', '$agility.points', '$persona.points', '$aptitude.points'] }, { $sum: ['$spentUpgradePoints', 12] }],
     },
   },
   campaignBasicDetails: {
