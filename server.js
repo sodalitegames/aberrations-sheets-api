@@ -27,7 +27,7 @@ const httpServer = createServer(expressServer);
 // Create and attach socket.io server to http server
 const socketServer = new Server(httpServer, {
   cors: {
-    origin: process.env.SOCKET_CLIENT,
+    origins: [process.env.SOCKET_CLIENT, process.env.SOCKET_CLIENT_STAGING],
     allowedHeaders: ['socket-header-secret'],
     credentials: true,
   },
