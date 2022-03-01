@@ -25,6 +25,14 @@ const charSheetSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A character sheet must have a speciesName'],
     },
+    specialtyId: {
+      type: mongoose.ObjectId,
+      // required: [true, 'A character sheet must have an associated specialtyId'],
+    },
+    specialtyName: {
+      type: String,
+      // required: [true, 'A character sheet must have a specialtyName'],
+    },
     charBackground: {
       type: String,
       required: [true, 'A character sheet must have a charBackground'],
@@ -74,7 +82,7 @@ const charSheetSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        max: 20,
         default: 3,
       },
       advantage: {
@@ -89,6 +97,11 @@ const charSheetSchema = new mongoose.Schema(
         type: Number,
         min: -5,
         max: 5,
+        default: 0,
+      },
+      pool: {
+        type: Number,
+        min: 0,
         default: 0,
       },
     },
@@ -96,7 +109,7 @@ const charSheetSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        max: 20,
         default: 3,
       },
       advantage: {
@@ -111,6 +124,11 @@ const charSheetSchema = new mongoose.Schema(
         type: Number,
         min: -5,
         max: 5,
+        default: 0,
+      },
+      pool: {
+        type: Number,
+        min: 0,
         default: 0,
       },
     },
@@ -118,7 +136,7 @@ const charSheetSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        max: 20,
         default: 3,
       },
       advantage: {
@@ -133,6 +151,11 @@ const charSheetSchema = new mongoose.Schema(
         type: Number,
         min: -5,
         max: 5,
+        default: 0,
+      },
+      pool: {
+        type: Number,
+        min: 0,
         default: 0,
       },
     },
@@ -140,7 +163,7 @@ const charSheetSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        max: 20,
         default: 3,
       },
       advantage: {
@@ -155,6 +178,11 @@ const charSheetSchema = new mongoose.Schema(
         type: Number,
         min: -5,
         max: 5,
+        default: 0,
+      },
+      pool: {
+        type: Number,
+        min: 0,
         default: 0,
       },
     },
@@ -173,11 +201,11 @@ charSheetSchema.virtual('power').get(function () {
 });
 
 charSheetSchema.virtual('maxHp').get(function () {
-  return (this.fortitude.points + this.fortitude.modifier) * 5;
+  return (this.fortitude.points + this.fortitude.modifier) * 10;
 });
 
-charSheetSchema.virtual('dodgeValue').get(function () {
-  return Math.floor((this.agility.points + this.agility.modifier) / 3);
+charSheetSchema.virtual('shieldValue').get(function () {
+  return this.agility.points + this.agility.modifier;
 });
 
 charSheetSchema.virtual('initiative').get(function () {

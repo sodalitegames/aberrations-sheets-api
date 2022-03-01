@@ -60,7 +60,7 @@ const creatureSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 20,
         default: 3,
       },
       advantage: {
@@ -72,7 +72,7 @@ const creatureSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 20,
         default: 3,
       },
       advantage: {
@@ -84,7 +84,7 @@ const creatureSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 20,
         default: 3,
       },
       advantage: {
@@ -96,7 +96,7 @@ const creatureSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        max: 10,
+        // max: 20,
         default: 3,
       },
       advantage: {
@@ -122,11 +122,11 @@ creatureSchema.virtual('power').get(function () {
 });
 
 creatureSchema.virtual('maxHp').get(function () {
-  return this.fortitude.points * 5;
+  return this.fortitude.points * 10;
 });
 
-creatureSchema.virtual('dodgeValue').get(function () {
-  return Math.floor(this.agility.points / 3);
+creatureSchema.virtual('shieldValue').get(function () {
+  return this.agility.points;
 });
 
 creatureSchema.virtual('initiative').get(function () {

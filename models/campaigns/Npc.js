@@ -18,6 +18,14 @@ const npcSchema = new mongoose.Schema(
       type: String,
       required: [true, 'An npc must have a speciesName'],
     },
+    specialtyId: {
+      type: mongoose.ObjectId,
+      // required: [true, 'An npc must have an associated specialtyId'],
+    },
+    specialtyName: {
+      type: String,
+      // required: [true, 'An npc must have a specialtyName'],
+    },
     diplomacy: {
       type: String,
       enum: ['Ally', 'Neutral', 'Enemy'],
@@ -83,7 +91,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        // max: 10,
+        // max: 20,
         default: 3,
       },
       advantage: {
@@ -98,6 +106,11 @@ const npcSchema = new mongoose.Schema(
         type: Number,
         min: -5,
         max: 5,
+        default: 0,
+      },
+      pool: {
+        type: Number,
+        min: 0,
         default: 0,
       },
     },
@@ -105,7 +118,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        // max: 10,
+        // max: 20,
         default: 3,
       },
       advantage: {
@@ -120,6 +133,11 @@ const npcSchema = new mongoose.Schema(
         type: Number,
         min: -5,
         max: 5,
+        default: 0,
+      },
+      pool: {
+        type: Number,
+        min: 0,
         default: 0,
       },
     },
@@ -127,7 +145,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        // max: 10,
+        // max: 20,
         default: 3,
       },
       advantage: {
@@ -142,6 +160,11 @@ const npcSchema = new mongoose.Schema(
         type: Number,
         min: -5,
         max: 5,
+        default: 0,
+      },
+      pool: {
+        type: Number,
+        min: 0,
         default: 0,
       },
     },
@@ -149,7 +172,7 @@ const npcSchema = new mongoose.Schema(
       points: {
         type: Number,
         min: 1,
-        // max: 10,
+        // max: 20,
         default: 3,
       },
       advantage: {
@@ -164,6 +187,11 @@ const npcSchema = new mongoose.Schema(
         type: Number,
         min: -5,
         max: 5,
+        default: 0,
+      },
+      pool: {
+        type: Number,
+        min: 0,
         default: 0,
       },
     },
@@ -185,11 +213,11 @@ npcSchema.virtual('power').get(function () {
 });
 
 npcSchema.virtual('maxHp').get(function () {
-  return (this.fortitude.points + this.fortitude.modifier) * 5;
+  return (this.fortitude.points + this.fortitude.modifier) * 10;
 });
 
-npcSchema.virtual('dodgeValue').get(function () {
-  return Math.floor((this.agility.points + this.agility.modifier) / 3);
+npcSchema.virtual('shieldValue').get(function () {
+  return this.agility.points + this.agility.modifier;
 });
 
 npcSchema.virtual('initiative').get(function () {

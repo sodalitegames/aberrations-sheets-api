@@ -42,6 +42,7 @@ const allowedFields = {
     'aptitude',
     'spentUpgradePoints',
     'mortality',
+    'active',
   ],
   campaigns: ['name', 'overview', 'details', 'ccNickname', 'memos', 'wallet'],
 };
@@ -110,7 +111,7 @@ exports.requireAuthorization = catchAsync(async (req, res, next) => {
 const pipelinePieces = {
   charSheetVirtualFields: {
     power: { $sum: ['$fortitude.points', '$fortitude.modifier', '$agility.points', '$agility.modifier', '$persona.points', '$persona.modifier', '$aptitude.points', '$aptitude.modifier'] },
-    dodgeValue: { $floor: { $divide: [{ $sum: ['$agility.points', '$agility.modifier'] }, 3] } },
+    shieldValue: { $sum: ['$agility.points', '$agility.modifier'] },
     maxHp: { $multiply: [{ $sum: ['$fortitude.points', '$fortitude.modifier'] }, 5] },
     initiative: { $sum: ['$persona.points', '$persona.modifier'] },
     assist: { $floor: { $divide: [{ $sum: ['$aptitude.points', '$aptitude.modifier'] }, 2] } },
@@ -189,14 +190,6 @@ exports.getSheet = catchAsync(async (req, res, next) => {
             },
           ]
         : []),
-      {
-        $lookup: {
-          from: 'augmentations',
-          localField: '_id',
-          foreignField: 'sheetId',
-          as: 'augmentations',
-        },
-      },
       {
         $lookup: {
           from: 'invites',
@@ -403,6 +396,14 @@ exports.getSheet = catchAsync(async (req, res, next) => {
         localField: '_id',
         foreignField: 'receivingSheetId',
         as: 'transactions.received',
+      },
+    },
+    {
+      $lookup: {
+        from: 'augmentations',
+        localField: '_id',
+        foreignField: 'sheetId',
+        as: 'augmentations',
       },
     },
     {
