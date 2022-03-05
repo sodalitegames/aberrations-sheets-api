@@ -11,6 +11,8 @@ const hpp = require('hpp');
 const playerRouter = require('./routers/player.router');
 const sheetRouter = require('./routers/sheet.router');
 
+const viewRouter = require('./routers/view.router');
+
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./utils/errorHandler');
 
@@ -86,12 +88,6 @@ app.use(
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Test middleware
-// app.use((req, res, next) => {
-//   console.log('Hello from the middleware function');
-//   next();
-// });
-
 // Setting request time
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
@@ -102,11 +98,8 @@ app.use((req, res, next) => {
 app.use('/v1/players', playerRouter);
 app.use('/v1/:sheetType', sheetRouter);
 
-app.use('/', (req, res) => {
-  res.status(200).render('root', {
-    mode: process.env.NODE_ENV,
-  });
-});
+// RENDER PUG TEMPLATES
+app.use('/', viewRouter);
 
 // CATCH ALL ROUTE FOR ANY UNHANDLED ROUTES
 app.all('*', (req, res, next) => {
