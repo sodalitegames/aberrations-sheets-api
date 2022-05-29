@@ -201,7 +201,7 @@ charSheetSchema.virtual('power').get(function () {
 });
 
 charSheetSchema.virtual('maxHp').get(function () {
-  return (this.fortitude.points + this.fortitude.modifier) * 10;
+  return (this.fortitude.points + this.fortitude.modifier) * 5;
 });
 
 charSheetSchema.virtual('shieldValue').get(function () {

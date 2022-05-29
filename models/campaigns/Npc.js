@@ -213,7 +213,7 @@ npcSchema.virtual('power').get(function () {
 });
 
 npcSchema.virtual('maxHp').get(function () {
-  return (this.fortitude.points + this.fortitude.modifier) * 10;
+  return (this.fortitude.points + this.fortitude.modifier) * 5;
 });
 
 npcSchema.virtual('shieldValue').get(function () {
