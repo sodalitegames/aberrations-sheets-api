@@ -27,7 +27,7 @@ const consumableSchema = new mongoose.Schema(
     },
     associatedStat: {
       type: String,
-      enum: ['fortitude', 'agility', 'persona', 'aptitude'],
+      enum: ['strength', 'agility', 'persona', 'aptitude'],
     },
     categories: {
       type: [{ name: String, description: String, universalId: mongoose.Schema.ObjectId }],

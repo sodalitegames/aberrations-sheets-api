@@ -34,9 +34,12 @@ const allowedFields = {
     'charDescription',
     'charBackground',
     'currentHp',
+    'maxHp',
+    'experience',
+    'milestones',
     'wallet',
     'conditions',
-    'fortitude',
+    'strength',
     'agility',
     'persona',
     'aptitude',
@@ -110,14 +113,9 @@ exports.requireAuthorization = catchAsync(async (req, res, next) => {
 
 const pipelinePieces = {
   charSheetVirtualFields: {
-    power: { $sum: ['$fortitude.points', '$fortitude.modifier', '$agility.points', '$agility.modifier', '$persona.points', '$persona.modifier', '$aptitude.points', '$aptitude.modifier'] },
-    shieldValue: { $sum: ['$agility.points', '$agility.modifier'] },
-    maxHp: { $multiply: [{ $sum: ['$fortitude.points', '$fortitude.modifier'] }, 5] },
-    initiative: { $sum: ['$persona.points', '$persona.modifier'] },
-    assist: { $floor: { $divide: [{ $sum: ['$aptitude.points', '$aptitude.modifier'] }, 2] } },
-    upgradePoints: {
-      $subtract: [{ $sum: ['$fortitude.points', '$agility.points', '$persona.points', '$aptitude.points'] }, { $sum: ['$spentUpgradePoints', 12] }],
-    },
+    speed: 3,
+    shieldValue: 0,
+    modifiers: [],
   },
   campaignBasicDetails: {
     name: 1,
