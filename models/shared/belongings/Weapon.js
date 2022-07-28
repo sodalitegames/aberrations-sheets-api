@@ -23,15 +23,15 @@ const weaponSchema = new mongoose.Schema(
       enum: ['Standard', 'Improvised', 'Custom'],
       required: [true, 'A weapon must have a specified type'],
     },
-    levelDamage: {
+    damageModifier: {
       type: Number,
       min: 1,
       max: 10,
-      required: [true, 'A weapon must have a levelDamage'],
+      required: [true, 'A weapon must have a damageModifier'],
     },
     associatedStat: {
       type: String,
-      enum: ['fortitude', 'agility', 'persona', 'aptitude'],
+      enum: ['strength', 'agility', 'persona', 'aptitude'],
       required: [true, 'A weapon must have an associatedStat'],
     },
     range: {

@@ -60,14 +60,21 @@ const npcSchema = new mongoose.Schema(
       min: 0,
       default: 0,
     },
-    spentUpgradePoints: {
-      type: Number,
-      min: 0,
-      default: 0,
-    },
     currentHp: {
       type: Number,
       required: [true, 'An npc must be given a starting currentHp'],
+    },
+    maxHp: {
+      type: Number,
+      required: [true, 'An npc must be given a starting maxHp'],
+    },
+    milestones: {
+      type: Number,
+      default: 0,
+    },
+    experience: {
+      type: Number,
+      default: 0,
     },
     conditions: {
       slowed: {
@@ -87,112 +94,40 @@ const npcSchema = new mongoose.Schema(
         default: 0,
       },
     },
-    fortitude: {
-      points: {
+    strength: {
+      die: {
         type: Number,
-        min: 1,
-        // max: 20,
-        default: 3,
-      },
-      advantage: {
-        type: Number,
-        default: 0,
-      },
-      experience: {
-        type: Number,
-        default: 0,
-      },
-      modifier: {
-        type: Number,
-        min: -5,
-        max: 5,
-        default: 0,
-      },
-      pool: {
-        type: Number,
-        min: 0,
-        default: 0,
+        min: 2,
+        max: 20,
+        default: 2,
+        enum: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
       },
     },
     agility: {
-      points: {
+      die: {
         type: Number,
-        min: 1,
-        // max: 20,
-        default: 3,
-      },
-      advantage: {
-        type: Number,
-        default: 0,
-      },
-      experience: {
-        type: Number,
-        default: 0,
-      },
-      modifier: {
-        type: Number,
-        min: -5,
-        max: 5,
-        default: 0,
-      },
-      pool: {
-        type: Number,
-        min: 0,
-        default: 0,
+        min: 2,
+        max: 20,
+        default: 2,
+        enum: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
       },
     },
     persona: {
-      points: {
+      die: {
         type: Number,
-        min: 1,
-        // max: 20,
-        default: 3,
-      },
-      advantage: {
-        type: Number,
-        default: 0,
-      },
-      experience: {
-        type: Number,
-        default: 0,
-      },
-      modifier: {
-        type: Number,
-        min: -5,
-        max: 5,
-        default: 0,
-      },
-      pool: {
-        type: Number,
-        min: 0,
-        default: 0,
+        min: 2,
+        max: 20,
+        default: 2,
+        enum: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
       },
     },
     aptitude: {
-      points: {
+      die: {
         type: Number,
-        min: 1,
-        // max: 20,
-        default: 3,
-      },
-      advantage: {
-        type: Number,
-        default: 0,
-      },
-      experience: {
-        type: Number,
-        default: 0,
-      },
-      modifier: {
-        type: Number,
-        min: -5,
-        max: 5,
-        default: 0,
-      },
-      pool: {
-        type: Number,
-        min: 0,
-        default: 0,
+        min: 2,
+        max: 20,
+        default: 2,
+        enum: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
       },
     },
     active: {
@@ -208,29 +143,19 @@ const npcSchema = new mongoose.Schema(
 );
 
 // Virtual properties
-npcSchema.virtual('power').get(function () {
-  return this.fortitude.points + this.fortitude.modifier + this.agility.points + this.agility.modifier + this.persona.points + this.persona.modifier + this.aptitude.points + this.aptitude.modifier;
-});
-
-npcSchema.virtual('maxHp').get(function () {
-  return (this.fortitude.points + this.fortitude.modifier) * 5;
+npcSchema.virtual('speed').get(function () {
+  // modified by augmentations and wearables
+  return 3;
 });
 
 npcSchema.virtual('shieldValue').get(function () {
-  return this.agility.points + this.agility.modifier;
+  // determined by augmentations and wearables
+  return 0;
 });
 
-npcSchema.virtual('initiative').get(function () {
-  return this.persona.points + this.persona.modifier;
-});
-
-npcSchema.virtual('assist').get(function () {
-  return Math.floor((this.aptitude.points + this.aptitude.modifier) / 2);
-});
-
-npcSchema.virtual('upgradePoints').get(function () {
-  const power = this.fortitude.points + this.agility.points + this.persona.points + this.aptitude.points;
-  return power - this.spentUpgradePoints - 12;
+npcSchema.virtual('modifiers').get(function () {
+  // determined by augmentations and wearables
+  return [];
 });
 
 npcSchema.virtual('augmentations', {

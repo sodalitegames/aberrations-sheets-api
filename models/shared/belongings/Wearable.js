@@ -23,23 +23,17 @@ const wearableSchema = new mongoose.Schema(
       enum: ['head', 'face', 'torso', 'arms', 'hands', 'legs', 'feet'],
       required: [true, 'A wearable must have a specified bodyArea'],
     },
-    statMods: {
-      fortitude: {
-        type: Number,
-        default: 0,
-      },
-      agility: {
-        type: Number,
-        default: 0,
-      },
-      persona: {
-        type: Number,
-        default: 0,
-      },
-      aptitude: {
-        type: Number,
-        default: 0,
-      },
+    modifiers: {
+      type: [{ name: String, amount: Number }],
+      default: [],
+    },
+    speedAdjustment: {
+      type: Number,
+      default: 0,
+    },
+    shieldValue: {
+      type: Number,
+      default: 0,
     },
     quantity: {
       type: Number,

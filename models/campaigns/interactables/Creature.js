@@ -22,7 +22,7 @@ const creatureSchema = new mongoose.Schema(
     },
     attackingStat: {
       type: String,
-      enum: ['fortitude', 'agility', 'persona', 'aptitude'],
+      enum: ['strength', 'agility', 'persona', 'aptitude'],
       required: [true, 'A creature must have an attackingStat'],
     },
     types: {
@@ -37,6 +37,10 @@ const creatureSchema = new mongoose.Schema(
     currentHp: {
       type: Number,
       required: [true, 'A creature must be given a starting currentHp'],
+    },
+    maxHp: {
+      type: Number,
+      required: [true, 'A creature must be given a starting maxHp'],
     },
     conditions: {
       slowed: {
@@ -56,52 +60,40 @@ const creatureSchema = new mongoose.Schema(
         default: 0,
       },
     },
-    fortitude: {
-      points: {
+    strength: {
+      die: {
         type: Number,
-        min: 1,
-        // max: 20,
-        default: 3,
-      },
-      advantage: {
-        type: Number,
-        default: 0,
+        min: 2,
+        max: 20,
+        default: 2,
+        enum: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
       },
     },
     agility: {
-      points: {
+      die: {
         type: Number,
-        min: 1,
-        // max: 20,
-        default: 3,
-      },
-      advantage: {
-        type: Number,
-        default: 0,
+        min: 2,
+        max: 20,
+        default: 2,
+        enum: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
       },
     },
     persona: {
-      points: {
+      die: {
         type: Number,
-        min: 1,
-        // max: 20,
-        default: 3,
-      },
-      advantage: {
-        type: Number,
-        default: 0,
+        min: 2,
+        max: 20,
+        default: 2,
+        enum: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
       },
     },
     aptitude: {
-      points: {
+      die: {
         type: Number,
-        min: 1,
-        // max: 20,
-        default: 3,
-      },
-      advantage: {
-        type: Number,
-        default: 0,
+        min: 2,
+        max: 20,
+        default: 2,
+        enum: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20],
       },
     },
     active: {
@@ -117,24 +109,19 @@ const creatureSchema = new mongoose.Schema(
 );
 
 // virtual properties
-creatureSchema.virtual('power').get(function () {
-  return this.fortitude.points + this.agility.points + this.persona.points + this.aptitude.points;
-});
-
-creatureSchema.virtual('maxHp').get(function () {
-  return this.fortitude.points * 10;
+creatureSchema.virtual('speed').get(function () {
+  // modified by augmentations and wearables
+  return 3;
 });
 
 creatureSchema.virtual('shieldValue').get(function () {
-  return this.agility.points;
+  // determined by augmentations and wearables
+  return 0;
 });
 
-creatureSchema.virtual('initiative').get(function () {
-  return this.persona.points;
-});
-
-creatureSchema.virtual('assist').get(function () {
-  return Math.floor(this.aptitude.points / 2);
+creatureSchema.virtual('modifiers').get(function () {
+  // determined by augmentations and wearables
+  return [];
 });
 
 const Creature = mongoose.model('Creature', creatureSchema);
