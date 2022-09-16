@@ -10,6 +10,7 @@ module.exports = {
   usableRouter: require('./shared/belongings/usable.router'),
   npcRouter: require('./campaigns/npc.router'),
   sessionRouter: require('./campaigns/session.router'),
+  combatRouter: require('./campaigns/combat.router'),
   environmentRouter: require('./campaigns/interactables/environment.router'),
   creatureRouter: require('./campaigns/interactables/creature.router'),
 };

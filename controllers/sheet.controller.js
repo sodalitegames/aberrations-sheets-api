@@ -19,6 +19,7 @@ const Consumable = require('../models/shared/belongings/Consumable');
 const Usable = require('../models/shared/belongings/Usable');
 const Npc = require('../models/campaigns/Npc');
 const Session = require('../models/campaigns/Session');
+const Combat = require('../models/campaigns/Combat');
 const Creature = require('../models/campaigns/interactables/Creature');
 const Environment = require('../models/campaigns/interactables/Environment');
 
@@ -352,6 +353,14 @@ exports.getSheet = catchAsync(async (req, res, next) => {
       },
       {
         $lookup: {
+          from: 'combats',
+          localField: '_id',
+          foreignField: 'sheetId',
+          as: 'combats',
+        },
+      },
+      {
+        $lookup: {
           from: 'environments',
           localField: '_id',
           foreignField: 'sheetId',
@@ -501,12 +510,13 @@ exports.deleteSheet = catchAsync(async (req, res, next) => {
 
   if (req.params.sheetType === 'campaigns') {
     const sessions = await Session.deleteMany({ sheetId: req.sheet.id });
+    const combats = await Combat.deleteMany({ sheetId: req.sheet.id });
     const npcs = await Npc.deleteMany({ sheetId: req.sheet.id });
     const creatures = await Creature.deleteMany({ sheetId: req.sheet.id });
     const environments = await Environment.deleteMany({ sheetId: req.sheet.id });
     const invites = await Invite.deleteMany({ campSheetId: req.sheet.id });
 
-    deletedCount = [...deletedCount, sessions, npcs, creatures, environments, invites];
+    deletedCount = [...deletedCount, sessions, combats, npcs, creatures, environments, invites];
   }
 
   const logs = await Log.deleteMany({ sheetId: req.sheet.id });
