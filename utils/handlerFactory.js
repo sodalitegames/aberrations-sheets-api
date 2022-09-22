@@ -19,6 +19,7 @@ const getId = params => {
 
   // campaigns
   if (params.sessionId) return params.sessionId;
+  if (params.combatId) return params.combatId;
   if (params.npcId) return params.npcId;
   if (params.environmentId) return params.environmentId;
   if (params.creatureId) return params.creatureId;
