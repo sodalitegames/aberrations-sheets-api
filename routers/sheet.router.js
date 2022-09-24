@@ -42,6 +42,7 @@ sheetRouter.use('/:sheetId/consumables', routers.consumableRouter);
 
 // campaign routes
 sheetRouter.use('/:sheetId/sessions', sheetController.restrictTo('campaigns'), routers.sessionRouter);
+sheetRouter.use('/:sheetId/combats', sheetController.restrictTo('campaigns'), routers.combatRouter);
 sheetRouter.use('/:sheetId/npcs', sheetController.restrictTo('campaigns'), routers.npcRouter);
 sheetRouter.use('/:sheetId/environments', sheetController.restrictTo('campaigns'), routers.environmentRouter);
 sheetRouter.use('/:sheetId/creatures', sheetController.restrictTo('campaigns'), routers.creatureRouter);
