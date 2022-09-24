@@ -48,8 +48,8 @@ const charSheetSchema = new mongoose.Schema(
     },
     mortality: {
       type: Number,
-      min: 0,
-      default: 0,
+      min: 1,
+      default: 1,
     },
     currentHp: {
       type: Number,
