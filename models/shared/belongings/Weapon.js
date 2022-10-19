@@ -26,7 +26,6 @@ const weaponSchema = new mongoose.Schema(
     damageModifier: {
       type: Number,
       min: 1,
-      max: 10,
       required: [true, 'A weapon must have a damageModifier'],
     },
     associatedStat: {
