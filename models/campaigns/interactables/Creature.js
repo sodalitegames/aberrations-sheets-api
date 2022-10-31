@@ -34,6 +34,10 @@ const creatureSchema = new mongoose.Schema(
       min: 1,
       default: 1,
     },
+    modifiers: {
+      type: [{ modifier: String, amount: Number }],
+      default: [],
+    },
     currentHp: {
       type: Number,
       required: [true, 'A creature must be given a starting currentHp'],
@@ -117,11 +121,6 @@ creatureSchema.virtual('speed').get(function () {
 creatureSchema.virtual('shieldValue').get(function () {
   // determined by augmentations and wearables
   return 0;
-});
-
-creatureSchema.virtual('modifiers').get(function () {
-  // determined by augmentations and wearables
-  return [];
 });
 
 const Creature = mongoose.model('Creature', creatureSchema);

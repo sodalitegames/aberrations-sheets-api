@@ -60,6 +60,10 @@ const npcSchema = new mongoose.Schema(
       min: 1,
       default: 1,
     },
+    modifiers: {
+      type: [{ modifier: String, amount: Number }],
+      default: [],
+    },
     currentHp: {
       type: Number,
       required: [true, 'An npc must be given a starting currentHp'],
@@ -151,11 +155,6 @@ npcSchema.virtual('speed').get(function () {
 npcSchema.virtual('shieldValue').get(function () {
   // determined by augmentations and wearables
   return 0;
-});
-
-npcSchema.virtual('modifiers').get(function () {
-  // determined by augmentations and wearables
-  return [];
 });
 
 npcSchema.virtual('augmentations', {
