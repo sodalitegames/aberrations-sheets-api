@@ -12,7 +12,7 @@ const combatSchema = new mongoose.Schema(
       required: [true, 'A combat must have a description'],
     },
     combatants: {
-      type: [{ name: String, type: { type: String, enum: ['players', 'npcs', 'creatures'] }, _id: mongoose.Schema.ObjectId, initiative: Number, inCombat: Boolean }],
+      type: [{ name: String, type: { type: String, enum: ['players', 'npcs', 'creatures'] }, _id: mongoose.Schema.ObjectId, initiative: Number }],
       required: [true, 'A combat must have combatants'],
     },
   },

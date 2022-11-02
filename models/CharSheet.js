@@ -51,6 +51,10 @@ const charSheetSchema = new mongoose.Schema(
       min: 1,
       default: 1,
     },
+    modifiers: {
+      type: [{ modifier: String, amount: Number }],
+      default: [],
+    },
     currentHp: {
       type: Number,
       required: [true, 'A character sheet must be given a starting currentHp'],
@@ -139,11 +143,6 @@ charSheetSchema.virtual('speed').get(function () {
 charSheetSchema.virtual('shieldValue').get(function () {
   // determined by augmentations and wearables
   return 0;
-});
-
-charSheetSchema.virtual('modifiers').get(function () {
-  // determined by augmentations and wearables
-  return [];
 });
 
 // Document middleware

@@ -24,7 +24,7 @@ const wearableSchema = new mongoose.Schema(
       required: [true, 'A wearable must have a specified bodyArea'],
     },
     modifiers: {
-      type: [{ name: String, amount: Number }],
+      type: [{ modifier: String, amount: Number }],
       default: [],
     },
     speedAdjustment: {
