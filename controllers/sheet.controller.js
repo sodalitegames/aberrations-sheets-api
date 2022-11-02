@@ -47,6 +47,7 @@ const allowedFields = {
     'spentUpgradePoints',
     'mortality',
     'active',
+    'modifiers',
   ],
   campaigns: ['name', 'overview', 'details', 'ccNickname', 'memos', 'wallet'],
 };
@@ -116,7 +117,6 @@ const pipelinePieces = {
   charSheetVirtualFields: {
     speed: 3,
     shieldValue: 0,
-    modifiers: [],
   },
   campaignBasicDetails: {
     name: 1,
