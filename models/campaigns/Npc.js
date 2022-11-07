@@ -33,11 +33,10 @@ const npcSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['Combat', 'Athlete', 'Politician', 'Scoundrel', 'Academic', 'Pedestrian'],
+      enum: ['Fighter', 'Combat', 'Athlete', 'Politician', 'Scoundrel', 'Academic', 'Pedestrian'],
     },
     levelId: {
       type: mongoose.ObjectId,
-      required: [true, 'An npc must have an associated levelId'],
     },
     temperament: {
       type: String,
