@@ -46,6 +46,16 @@ const creatureSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A creature must be given a starting maxHp'],
     },
+    speed: {
+      type: Number,
+      required: [true, 'A creature must have a speed'],
+      default: 3,
+    },
+    shieldValue: {
+      type: Number,
+      required: [true, 'A creature must have a shield value'],
+      default: 0,
+    },
     conditions: {
       slowed: {
         type: Number,
@@ -111,17 +121,6 @@ const creatureSchema = new mongoose.Schema(
   },
   { toJSON: { virtuals: true }, timestamps: true }
 );
-
-// virtual properties
-creatureSchema.virtual('speed').get(function () {
-  // modified by augmentations and wearables
-  return 3;
-});
-
-creatureSchema.virtual('shieldValue').get(function () {
-  // determined by augmentations and wearables
-  return 0;
-});
 
 const Creature = mongoose.model('Creature', creatureSchema);
 
