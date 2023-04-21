@@ -34,6 +34,10 @@ const campSheetSchema = new mongoose.Schema(
     },
     players: [{ type: mongoose.Schema.ObjectId, ref: 'Characters' }],
     slug: String,
+    version: {
+      type: Number,
+      default: 1.1,
+    },
   },
   { timestamps: true }
 );
