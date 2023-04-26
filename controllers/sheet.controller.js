@@ -280,50 +280,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
         $lookup: {
           from: 'npcs',
           let: { currId: '$_id' },
-          pipeline: [
-            { $match: { $expr: { $eq: ['$sheetId', '$$currId'] } } },
-            { $addFields: pipelinePieces.charSheetVirtualFields },
-            {
-              $lookup: {
-                from: 'augmentations',
-                localField: '_id',
-                foreignField: 'npcId',
-                as: 'augmentations',
-              },
-            },
-            {
-              $lookup: {
-                from: 'weapons',
-                localField: '_id',
-                foreignField: 'npcId',
-                as: 'weapons',
-              },
-            },
-            {
-              $lookup: {
-                from: 'wearables',
-                localField: '_id',
-                foreignField: 'npcId',
-                as: 'wearables',
-              },
-            },
-            {
-              $lookup: {
-                from: 'consumables',
-                localField: '_id',
-                foreignField: 'npcId',
-                as: 'consumables',
-              },
-            },
-            {
-              $lookup: {
-                from: 'usables',
-                localField: '_id',
-                foreignField: 'npcId',
-                as: 'usables',
-              },
-            },
-          ],
+          pipeline: [{ $match: { $expr: { $eq: ['$sheetId', '$$currId'] } } }, { $addFields: pipelinePieces.charSheetVirtualFields }],
           as: 'npcs',
         },
       },
