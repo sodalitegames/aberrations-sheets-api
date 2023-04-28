@@ -17,4 +17,10 @@ const playerSchema = new mongoose.Schema(
 
 const Player = mongoose.model('Player', playerSchema);
 
-module.exports = Player;
+// Connect to Auth Database
+const auth = mongoose.connection.useDb(process.env.DB_AUTH_STRING);
+// Create Player model in Auth Database
+const AuthPlayer = auth.model('Player', playerSchema);
+
+exports.Player = Player;
+exports.AuthPlayer = AuthPlayer;
