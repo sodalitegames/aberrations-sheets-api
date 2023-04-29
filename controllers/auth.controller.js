@@ -29,8 +29,8 @@ exports.requireAuthentication = catchAsync(async (req, res, next) => {
   }
 
   // Fetch collection user and get its data
-  const user = await firestore.collection('users').doc(decoded.uid).get();
-  const data = user.data();
+  const userRef = firestore.collection('users').doc(decoded.uid);
+  const data = (await userRef.get()).data();
 
   // Check if player exists
   let player = await Player.findById(data.player_id);
@@ -57,6 +57,11 @@ exports.requireAuthentication = catchAsync(async (req, res, next) => {
   if (player.email !== decoded.email) {
     // If the emails do not match, update the players email to match the users
     player = await Player.findByIdAndUpdate(data.player_id, { email: decoded.email }, { new: true });
+  }
+
+  if (!data.has_joined_sheets) {
+    // If not already, note on the user object that they have joined sheets
+    await userRef.update({ has_joined_sheets: true });
   }
 
   // Save user data, decoded token, and player to req.body
