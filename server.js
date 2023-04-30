@@ -12,9 +12,11 @@ process.on('uncaughtException', err => {
   process.exit(1);
 });
 
-const expressServer = require('./app');
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: './config.env' });
+}
 
-dotenv.config({ path: './config.env' });
+const expressServer = require('./app');
 
 // Connect to mongodb via mongoose connection
 mongoose.connect(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log(`db connection successful`));

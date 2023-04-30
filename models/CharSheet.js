@@ -130,6 +130,10 @@ const charSheetSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    version: {
+      type: Number,
+      default: 2.1,
+    },
   },
   { toJSON: { virtuals: true }, timestamps: true }
 );
