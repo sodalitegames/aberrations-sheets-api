@@ -2,11 +2,10 @@ function listen(io) {
   // Set up namespaces
   const charactersNamespace = io.of('/characters');
   const campaignsNamespace = io.of('/campaigns');
-  // const sessionsNamespace = io.of('/sessions');
-  // const messagesNamespace = io.of('/messages');
+  const playersNamespace = io.of('/players');
 
   charactersNamespace.on('connection', socket => {
-    console.log(`client ${socket.id} connected`);
+    console.log(`client ${socket.id} connected: namespace:character`);
 
     socket.on('joinRoom', room => {
       console.log('character', 'join', room);
@@ -31,12 +30,12 @@ function listen(io) {
     });
 
     socket.on('disconnect', reason => {
-      console.log(`client ${socket.id} disconnected: ${reason}`);
+      console.log(`client ${socket.id} disconnected: namespace:character: ${reason}`);
     });
   });
 
   campaignsNamespace.on('connection', socket => {
-    console.log(`client ${socket.id} connected`);
+    console.log(`client ${socket.id} connected: namespace:campaign`);
 
     socket.on('joinRoom', room => {
       console.log('campaign', 'join', room);
@@ -61,7 +60,37 @@ function listen(io) {
     });
 
     socket.on('disconnect', reason => {
-      console.log(`client ${socket.id} disconnected: ${reason}`);
+      console.log(`client ${socket.id} disconnected: namespace:campaign: ${reason}`);
+    });
+  });
+
+  playersNamespace.on('connection', socket => {
+    console.log(`client ${socket.id} connected: namespace:player`);
+
+    socket.on('joinRoom', room => {
+      console.log('player', 'join', room);
+      socket.join(room);
+      socket.to(room).emit('message', `client ${socket.id} joined player room ${room}`);
+    });
+
+    socket.on('leaveRoom', room => {
+      console.log('player', 'leave', room);
+      socket.leave(room);
+      socket.to(room).emit('message', `client ${socket.id} left player room ${room}`);
+    });
+
+    socket.on('changes', ({ sheet, room, type, args }) => {
+      console.log('player', 'changes', { sheet, room, type, args });
+      socket.to(room).emit('updates', { sheet, room, type, args });
+    });
+
+    socket.on('message', ({ room, message }) => {
+      console.log('player', 'message', message);
+      socket.to(room).emit('message', message);
+    });
+
+    socket.on('disconnect', reason => {
+      console.log(`client ${socket.id} disconnected: namespace:player: ${reason}`);
     });
   });
 }
