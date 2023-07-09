@@ -36,7 +36,6 @@ const allowedFields = {
     'charBackground',
     'currentHp',
     'maxHp',
-    'experience',
     'milestones',
     'wallet',
     'conditions',
@@ -44,10 +43,13 @@ const allowedFields = {
     'agility',
     'persona',
     'aptitude',
-    'spentUpgradePoints',
     'mortality',
     'active',
     'modifiers',
+    'level',
+    'speed',
+    'skills',
+    'shieldValue',
   ],
   campaigns: ['name', 'overview', 'details', 'ccNickname', 'memos', 'wallet'],
 };
@@ -114,10 +116,6 @@ exports.requireAuthorization = catchAsync(async (req, res, next) => {
 });
 
 const pipelinePieces = {
-  charSheetVirtualFields: {
-    speed: 3,
-    shieldValue: 0,
-  },
   campaignBasicDetails: {
     name: 1,
     overview: 1,
@@ -138,9 +136,6 @@ exports.getSheet = catchAsync(async (req, res, next) => {
 
   if (req.params.sheetType === 'characters') {
     pipelineArr = [
-      {
-        $addFields: pipelinePieces.charSheetVirtualFields,
-      },
       ...(req.sheet.campaign
         ? [
             {
@@ -219,7 +214,6 @@ exports.getSheet = catchAsync(async (req, res, next) => {
                 let: { charId: '$players' },
                 pipeline: [
                   { $match: { $expr: { $eq: ['$_id', '$$charId'] } } },
-                  { $addFields: pipelinePieces.charSheetVirtualFields },
                   {
                     $lookup: {
                       from: 'augmentations',
@@ -280,7 +274,7 @@ exports.getSheet = catchAsync(async (req, res, next) => {
         $lookup: {
           from: 'npcs',
           let: { currId: '$_id' },
-          pipeline: [{ $match: { $expr: { $eq: ['$sheetId', '$$currId'] } } }, { $addFields: pipelinePieces.charSheetVirtualFields }],
+          pipeline: [{ $match: { $expr: { $eq: ['$sheetId', '$$currId'] } } }],
           as: 'npcs',
         },
       },

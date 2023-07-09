@@ -36,7 +36,7 @@ const campSheetSchema = new mongoose.Schema(
     slug: String,
     version: {
       type: Number,
-      default: 1.1,
+      default: 2.0,
     },
   },
   { timestamps: true }

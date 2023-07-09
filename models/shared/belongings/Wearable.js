@@ -27,7 +27,7 @@ const wearableSchema = new mongoose.Schema(
       type: [{ modifier: String, amount: Number }],
       default: [],
     },
-    speedAdjustment: {
+    speed: {
       type: Number,
       default: 0,
     },
