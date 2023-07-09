@@ -63,6 +63,10 @@ const npcSchema = new mongoose.Schema(
       type: [{ modifier: String, amount: Number }],
       default: [],
     },
+    skills: {
+      type: [{ skill: String, type: { type: String, enum: ['skilled', 'expert'] } }],
+      default: [],
+    },
     currentHp: {
       type: Number,
       required: [true, 'An npc must be given a starting currentHp'],
@@ -71,11 +75,15 @@ const npcSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'An npc must be given a starting maxHp'],
     },
-    milestones: {
+    level: {
       type: Number,
-      default: 0,
+      default: 1,
     },
-    experience: {
+    speed: {
+      type: Number,
+      default: 3,
+    },
+    shieldValue: {
       type: Number,
       default: 0,
     },
@@ -89,10 +97,6 @@ const npcSchema = new mongoose.Schema(
         default: 0,
       },
       injured: {
-        type: Number,
-        default: 0,
-      },
-      disturbed: {
         type: Number,
         default: 0,
       },
@@ -146,16 +150,6 @@ const npcSchema = new mongoose.Schema(
 );
 
 // Virtual properties
-npcSchema.virtual('speed').get(function () {
-  // modified by augmentations and wearables
-  return 3;
-});
-
-npcSchema.virtual('shieldValue').get(function () {
-  // determined by augmentations and wearables
-  return 0;
-});
-
 npcSchema.virtual('augmentations', {
   ref: 'Augmentation',
   foreignField: 'npcId',

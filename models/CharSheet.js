@@ -51,6 +51,10 @@ const charSheetSchema = new mongoose.Schema(
       min: 1,
       default: 1,
     },
+    skills: {
+      type: [{ skill: String, type: { type: String, enum: ['skilled', 'expert'] } }],
+      default: [],
+    },
     modifiers: {
       type: [{ modifier: String, amount: Number }],
       default: [],
@@ -63,11 +67,15 @@ const charSheetSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'A character sheet must be given a starting maxHp'],
     },
-    milestones: {
+    level: {
       type: Number,
-      default: 0,
+      default: 1,
     },
-    experience: {
+    speed: {
+      type: Number,
+      default: 3,
+    },
+    shieldValue: {
       type: Number,
       default: 0,
     },
@@ -81,10 +89,6 @@ const charSheetSchema = new mongoose.Schema(
         default: 0,
       },
       injured: {
-        type: Number,
-        default: 0,
-      },
-      disturbed: {
         type: Number,
         default: 0,
       },
@@ -132,22 +136,11 @@ const charSheetSchema = new mongoose.Schema(
     },
     version: {
       type: Number,
-      default: 2.1,
+      default: 3.0,
     },
   },
   { toJSON: { virtuals: true }, timestamps: true }
 );
-
-// Virtual properties
-charSheetSchema.virtual('speed').get(function () {
-  // modified by augmentations and wearables
-  return 3;
-});
-
-charSheetSchema.virtual('shieldValue').get(function () {
-  // determined by augmentations and wearables
-  return 0;
-});
 
 // Document middleware
 charSheetSchema.pre('save', function (next) {
