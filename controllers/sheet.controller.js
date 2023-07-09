@@ -191,6 +191,14 @@ exports.getSheet = catchAsync(async (req, res, next) => {
         : []),
       {
         $lookup: {
+          from: 'combats',
+          localField: '_id',
+          foreignField: 'combatants._id',
+          as: 'combats',
+        },
+      },
+      {
+        $lookup: {
           from: 'invites',
           localField: '_id',
           foreignField: 'charSheetId',

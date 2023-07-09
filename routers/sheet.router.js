@@ -40,9 +40,11 @@ sheetRouter.use('/:sheetId/wearables', routers.wearableRouter);
 sheetRouter.use('/:sheetId/usables', routers.usableRouter);
 sheetRouter.use('/:sheetId/consumables', routers.consumableRouter);
 
+// mixed routes
+sheetRouter.use('/:sheetId/combats', routers.combatRouter);
+
 // campaign routes
 sheetRouter.use('/:sheetId/sessions', sheetController.restrictTo('campaigns'), routers.sessionRouter);
-sheetRouter.use('/:sheetId/combats', sheetController.restrictTo('campaigns'), routers.combatRouter);
 sheetRouter.use('/:sheetId/npcs', sheetController.restrictTo('campaigns'), routers.npcRouter);
 sheetRouter.use('/:sheetId/environments', sheetController.restrictTo('campaigns'), routers.environmentRouter);
 sheetRouter.use('/:sheetId/creatures', sheetController.restrictTo('campaigns'), routers.creatureRouter);
